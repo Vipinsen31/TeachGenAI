@@ -1,75 +1,175 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TeachGenAI</title>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f4f7fb;
-      color: #222;
+      color: #172033;
     }
 
     header {
-      background: #2563eb;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
       color: white;
-      padding: 22px;
+      padding: 25px 20px;
       text-align: center;
     }
 
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      opacity: 0.9;
+    }
+
     .container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 18px;
     }
 
     .card {
       background: white;
-      padding: 28px;
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
     }
 
-    input, select, button {
+    label {
+      display: block;
+      font-weight: bold;
+      margin: 15px 0 8px;
+    }
+
+    input, select {
       width: 100%;
-      padding: 13px;
-      margin-top: 12px;
-      box-sizing: border-box;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+      padding: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
       font-size: 16px;
     }
 
     button {
+      border: none;
+      border-radius: 10px;
+      padding: 13px 18px;
+      margin: 8px 5px 0 0;
+      font-size: 15px;
+      cursor: pointer;
       background: #2563eb;
       color: white;
-      border: none;
-      cursor: pointer;
       font-weight: bold;
     }
 
     button:hover {
-      background: #1d4ed8;
+      opacity: 0.9;
     }
 
-    #result {
-      margin-top: 25px;
-      padding: 20px;
-      background: #eef4ff;
-      border-radius: 12px;
+    button.secondary {
+      background: #64748b;
+    }
+
+    button.success {
+      background: #16a34a;
+    }
+
+    button.warning {
+      background: #ea580c;
+    }
+
+    .hidden {
       display: none;
-      line-height: 1.6;
+    }
+
+    .lesson-title {
+      color: #2563eb;
+      margin-top: 0;
+    }
+
+    .objective {
+      background: #eff6ff;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 7px 0;
     }
 
     .scene {
-      margin-top: 15px;
-      padding: 15px;
-      background: white;
-      border-left: 4px solid #2563eb;
-      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      background: #fafafa;
+    }
+
+    .scene h3 {
+      margin-top: 0;
+      color: #4f46e5;
+    }
+
+    .video-box {
+      background: #111827;
+      color: white;
+      border-radius: 15px;
+      padding: 25px;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .video-box h2 {
+      color: #93c5fd;
+      font-size: 26px;
+    }
+
+    .visual {
+      background: #1f2937;
+      border-radius: 10px;
+      padding: 25px;
+      margin: 15px 0;
+      color: #dbeafe;
+    }
+
+    .progress {
+      width: 100%;
+      height: 8px;
+      background: #374151;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 18px 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #60a5fa;
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .status {
+      margin-top: 12px;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #64748b;
     }
   </style>
 </head>
@@ -77,85 +177,496 @@
 <body>
 
 <header>
-  <h1>🎓 TeachGenAI</h1>
-  <p>Intelligent System for Automated Educational Video Generation</p>
+  <h1>TeachGenAI</h1>
+  <p>An Intelligent System for Automated Educational Video Generation</p>
 </header>
 
 <div class="container">
+
+  <!-- INPUT -->
   <div class="card">
     <h2>Generate Educational Content</h2>
 
-    <input id="topic" type="text" placeholder="Enter a topic, e.g. Photosynthesis">
+    <label for="topic">Enter Topic</label>
+    <input
+      id="topic"
+      type="text"
+      placeholder="Example: Photosynthesis"
+    >
 
+    <label for="language">Select Language</label>
     <select id="language">
-      <option value="English">English</option>
-      <option value="Hindi">Hindi</option>
+      <option value="en">English</option>
+      <option value="hi">Hindi</option>
     </select>
 
-    <button onclick="generateLesson()">Generate Educational Lesson</button>
+    <br>
 
-    <div id="result"></div>
+    <button onclick="generateLesson()">
+      Generate Educational Lesson
+    </button>
+
+    <div id="status" class="status"></div>
   </div>
+
+  <!-- LESSON -->
+  <div id="lessonSection" class="card hidden">
+    <div id="lessonResult"></div>
+
+    <button class="success" onclick="createVideo()">
+      🎥 Create Educational Video
+    </button>
+  </div>
+
+  <!-- VIDEO -->
+  <div id="videoSection" class="card hidden">
+    <h2>🎬 Educational Video Preview</h2>
+
+    <div class="video-box">
+
+      <h2 id="videoTitle"></h2>
+
+      <div class="visual">
+        <strong>Visual:</strong>
+        <p id="videoVisual"></p>
+      </div>
+
+      <div>
+        <strong id="videoSceneText"></strong>
+      </div>
+
+      <p id="videoNarration"></p>
+
+      <div class="progress">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+
+      <div>
+        <button class="secondary" onclick="previousScene()">
+          ⬅ Previous
+        </button>
+
+        <button onclick="togglePlay()" id="playButton">
+          ▶ Play
+        </button>
+
+        <button class="secondary" onclick="nextScene()">
+          Next ➡
+        </button>
+
+        <button class="warning" onclick="restartVideo()">
+          🔄 Restart
+        </button>
+
+        <button class="success" onclick="speakCurrentScene()">
+          🔊 Voice
+        </button>
+      </div>
+
+      <p id="sceneCounter"></p>
+
+    </div>
+  </div>
+
 </div>
 
+<footer>
+  TeachGenAI © 2026
+</footer>
+
+
 <script>
+
+let currentLesson = null;
+let currentScene = 0;
+let playing = false;
+let playTimer = null;
+
+
+/* -----------------------------
+   GENERATE LESSON
+------------------------------ */
+
 function generateLesson() {
+
   const topic = document.getElementById("topic").value.trim();
   const language = document.getElementById("language").value;
-  const result = document.getElementById("result");
+  const status = document.getElementById("status");
 
   if (!topic) {
-    alert("Please enter a topic.");
+    status.innerText = "Please enter a topic first.";
     return;
   }
 
-  let title;
-  let intro;
+  status.innerText = "Generating educational lesson...";
 
-  if (language === "Hindi") {
-    title = topic + " — शैक्षिक पाठ";
-    intro = topic + " को सरल भाषा में समझें। यह TeachGenAI का AI-powered educational lesson है।";
+  let lesson;
+
+  if (language === "hi") {
+
+    lesson = {
+      title: topic + " — शैक्षणिक पाठ",
+
+      objectives: [
+        topic + " की मूल अवधारणा समझना",
+        topic के मुख्य बिंदुओं को पहचानना,
+        topic के वास्तविक जीवन में उपयोग को समझना
+      ],
+
+      intro:
+        topic + " एक महत्वपूर्ण शैक्षणिक विषय है। इस पाठ में हम इसे आसान भाषा में समझेंगे और इसके मुख्य बिंदुओं को जानेंगे।",
+
+      scenes: [
+
+        {
+          title: "परिचय",
+          visual: topic + " से संबंधित शैक्षणिक चित्र",
+          text: topic + " क्या है?",
+          narration:
+            "आज हम " + topic + " के बारे में आसान भाषा में सीखेंगे।"
+        },
+
+        {
+          title: "मुख्य अवधारणा",
+          visual: topic + " की मुख्य प्रक्रिया या संरचना",
+          text: "मुख्य अवधारणा",
+          narration:
+            topic + " को समझने के लिए इसकी मूल अवधारणा को जानना आवश्यक है।"
+        },
+
+        {
+          title: "मुख्य बिंदु",
+          visual: topic + " के महत्वपूर्ण बिंदुओं का diagram",
+          text: "महत्वपूर्ण बिंदु",
+          narration:
+            topic + " से जुड़े कई महत्वपूर्ण बिंदु हैं जिन्हें हमें याद रखना चाहिए।"
+        },
+
+        {
+          title: "वास्तविक जीवन में उपयोग",
+          visual: "Real-life application of " + topic,
+          text: "Applications",
+          narration:
+            topic + " का उपयोग वास्तविक जीवन और विभिन्न क्षेत्रों में किया जाता है।"
+        },
+
+        {
+          title: "सारांश",
+          visual: topic + " summary diagram",
+          text: "अंतिम सारांश",
+          narration:
+            "आज हमने " + topic + " की मूल अवधारणा, मुख्य बिंदु और इसके उपयोग के बारे में सीखा।"
+        }
+
+      ]
+    };
+
   } else {
-    title = topic + " — Educational Lesson";
-    intro = "Learn " + topic + " in a simple and easy-to-understand way with TeachGenAI.";
+
+    lesson = {
+      title: topic + " — Educational Lesson",
+
+      objectives: [
+        "Understand the basic concept of " + topic,
+        "Identify the important points of " + topic,
+        "Understand real-world applications of " + topic
+      ],
+
+      intro:
+        topic + " is an important educational topic. In this lesson, we will understand it in a simple way and explore its key concepts.",
+
+      scenes: [
+
+        {
+          title: "Introduction",
+          visual: "Educational illustration related to " + topic,
+          text: "What is " + topic + "?",
+          narration:
+            "Today we are going to learn about " + topic + " in a simple and easy way."
+        },
+
+        {
+          title: "Main Concept",
+          visual: "Main process or structure of " + topic,
+          text: "Main Concept",
+          narration:
+            "To understand " + topic + ", we first need to understand its basic concept."
+        },
+
+        {
+          title: "Important Points",
+          visual: "Diagram showing important points of " + topic,
+          text: "Important Points",
+          narration:
+            "There are several important points related to " + topic + " that we should remember."
+        },
+
+        {
+          title: "Real-World Applications",
+          visual: "Real-life applications of " + topic,
+          text: "Applications",
+          narration:
+            topic + " is used in many real-world situations and different fields."
+        },
+
+        {
+          title: "Summary",
+          visual: "Summary diagram of " + topic,
+          text: "Final Summary",
+          narration:
+            "Today we learned the basic concept, important points and applications of " + topic + "."
+        }
+
+      ]
+    };
   }
 
-  result.style.display = "block";
+  currentLesson = lesson;
 
-  result.innerHTML = `
-    <h2>${title}</h2>
-    <p>${intro}</p>
+  displayLesson();
 
-    <h3>Learning Objectives</h3>
-    <ul>
-      <li>Understand the basic concept of ${topic}</li>
-      <li>Learn important points and applications</li>
-      <li>Review the topic through a structured lesson</li>
-    </ul>
-
-    <h3>🎬 Educational Video Storyboard</h3>
-
-    <div class="scene">
-      <b>Scene 1 — Introduction</b>
-      <p>Introduction to ${topic}.</p>
-    </div>
-
-    <div class="scene">
-      <b>Scene 2 — Main Concept</b>
-      <p>Explanation of the key concepts of ${topic}.</p>
-    </div>
-
-    <div class="scene">
-      <b>Scene 3 — Example</b>
-      <p>A simple example to understand ${topic}.</p>
-    </div>
-
-    <div class="scene">
-      <b>Scene 4 — Summary</b>
-      <p>Important points of ${topic} are summarized here.</p>
-    </div>
-  `;
+  status.innerText = "Lesson generated successfully.";
 }
+
+
+/* -----------------------------
+   DISPLAY LESSON
+------------------------------ */
+
+function displayLesson() {
+
+  const section = document.getElementById("lessonSection");
+  const result = document.getElementById("lessonResult");
+
+  let html = "";
+
+  html += `<h2 class="lesson-title">${currentLesson.title}</h2>`;
+
+  html += `<h3>Learning Objectives</h3>`;
+
+  currentLesson.objectives.forEach(function(item) {
+    html += `<div class="objective">✓ ${item}</div>`;
+  });
+
+  html += `<h3>Introduction</h3>`;
+  html += `<p>${currentLesson.intro}</p>`;
+
+  html += `<h3>Storyboard</h3>`;
+
+  currentLesson.scenes.forEach(function(scene, index) {
+
+    html += `
+      <div class="scene">
+        <h3>Scene ${index + 1}: ${scene.title}</h3>
+        <p><strong>Visual:</strong> ${scene.visual}</p>
+        <p><strong>On-screen Text:</strong> ${scene.text}</p>
+        <p><strong>Narration:</strong> ${scene.narration}</p>
+      </div>
+    `;
+  });
+
+  result.innerHTML = html;
+
+  section.classList.remove("hidden");
+}
+
+
+/* -----------------------------
+   CREATE VIDEO
+------------------------------ */
+
+function createVideo() {
+
+  if (!currentLesson) {
+    return;
+  }
+
+  currentScene = 0;
+  playing = false;
+
+  document.getElementById("videoSection")
+    .classList.remove("hidden");
+
+  document.getElementById("videoSection")
+    .scrollIntoView({
+      behavior: "smooth"
+    });
+
+  updateVideoScene();
+}
+
+
+/* -----------------------------
+   UPDATE VIDEO SCENE
+------------------------------ */
+
+function updateVideoScene() {
+
+  const scene = currentLesson.scenes[currentScene];
+
+  document.getElementById("videoTitle").innerText =
+    scene.title;
+
+  document.getElementById("videoVisual").innerText =
+    scene.visual;
+
+  document.getElementById("videoSceneText").innerText =
+    scene.text;
+
+  document.getElementById("videoNarration").innerText =
+    scene.narration;
+
+  document.getElementById("sceneCounter").innerText =
+    "Scene " + (currentScene + 1) +
+    " of " + currentLesson.scenes.length;
+
+  const progress =
+    ((currentScene + 1) / currentLesson.scenes.length) * 100;
+
+  document.getElementById("progressBar").style.width =
+    progress + "%";
+}
+
+
+/* -----------------------------
+   NEXT SCENE
+------------------------------ */
+
+function nextScene() {
+
+  if (!currentLesson) return;
+
+  stopPlayback();
+
+  if (currentScene < currentLesson.scenes.length - 1) {
+    currentScene++;
+    updateVideoScene();
+  }
+}
+
+
+/* -----------------------------
+   PREVIOUS SCENE
+------------------------------ */
+
+function previousScene() {
+
+  if (!currentLesson) return;
+
+  stopPlayback();
+
+  if (currentScene > 0) {
+    currentScene--;
+    updateVideoScene();
+  }
+}
+
+
+/* -----------------------------
+   PLAY / PAUSE
+------------------------------ */
+
+function togglePlay() {
+
+  if (!currentLesson) return;
+
+  if (playing) {
+    stopPlayback();
+  } else {
+    startPlayback();
+  }
+}
+
+
+function startPlayback() {
+
+  playing = true;
+
+  document.getElementById("playButton").innerText =
+    "⏸ Pause";
+
+  speakCurrentScene();
+
+  playTimer = setTimeout(function() {
+
+    if (currentScene < currentLesson.scenes.length - 1) {
+
+      currentScene++;
+
+      updateVideoScene();
+
+      startPlayback();
+
+    } else {
+
+      stopPlayback();
+
+    }
+
+  }, 5000);
+}
+
+
+function stopPlayback() {
+
+  playing = false;
+
+  clearTimeout(playTimer);
+
+  speechSynthesis.cancel();
+
+  document.getElementById("playButton").innerText =
+    "▶ Play";
+}
+
+
+/* -----------------------------
+   RESTART
+------------------------------ */
+
+function restartVideo() {
+
+  stopPlayback();
+
+  currentScene = 0;
+
+  updateVideoScene();
+}
+
+
+/* -----------------------------
+   VOICE
+------------------------------ */
+
+function speakCurrentScene() {
+
+  if (!currentLesson) return;
+
+  speechSynthesis.cancel();
+
+  const scene =
+    currentLesson.scenes[currentScene];
+
+  const language =
+    document.getElementById("language").value;
+
+  const speech =
+    new SpeechSynthesisUtterance(
+      scene.narration
+    );
+
+  if (language === "hi") {
+    speech.lang = "hi-IN";
+  } else {
+    speech.lang = "en-US";
+  }
+
+  speech.rate = 0.9;
+  speech.pitch = 1;
+
+  speechSynthesis.speak(speech);
+}
+
 </script>
 
 </body>
