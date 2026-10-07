@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>TeachGenAI</title>
 
   <style>
@@ -59,12 +60,19 @@
       margin-bottom: 7px;
     }
 
-    input, select, button {
+    input,
+    select,
+    button {
       width: 100%;
       padding: 12px;
       border-radius: 9px;
       border: 1px solid #cbd5e1;
       font-size: 16px;
+    }
+
+    input,
+    select {
+      background: white;
     }
 
     button {
@@ -88,8 +96,12 @@
       background: #16a34a;
     }
 
+    button.warning-btn {
+      background: #d97706;
+    }
+
     .hidden {
-      display: none;
+      display: none !important;
     }
 
     .teacher-preview {
@@ -98,11 +110,17 @@
     }
 
     .teacher-preview img {
-      max-width: 220px;
-      max-height: 250px;
+      width: 220px;
+      height: 250px;
+      max-width: 100%;
       border-radius: 15px;
       object-fit: cover;
       border: 3px solid #2563eb;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 12px;
     }
 
     .scene {
@@ -133,6 +151,7 @@
       object-fit: cover;
       border: 4px solid white;
       margin: 10px auto;
+      display: block;
     }
 
     .video-text {
@@ -142,10 +161,17 @@
       margin: 15px 0;
     }
 
+    .video-narration {
+      font-size: 14px;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
     .controls {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
+      margin-top: 15px;
     }
 
     .controls button {
@@ -166,15 +192,46 @@
       background: #fff7ed;
       color: #9a3412;
       margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    .success-box {
+      padding: 12px;
+      border-radius: 8px;
+      background: #f0fdf4;
+      color: #166534;
+      margin-top: 12px;
+      line-height: 1.5;
     }
 
     .objective {
       margin: 7px 0;
     }
 
+    .voice-info {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      line-height: 1.5;
+    }
+
     @media (max-width: 600px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
       .controls {
         grid-template-columns: 1fr 1fr;
+      }
+
+      .video-text {
+        font-size: 18px;
       }
     }
   </style>
@@ -189,11 +246,18 @@
 
 <div class="container">
 
+  <!-- ============================= -->
   <!-- TEACHER PROFILE -->
+  <!-- ============================= -->
+
   <div class="card">
+
     <h2>👤 My AI Teacher</h2>
 
-    <label for="photoInput">Upload Your Photo</label>
+    <label for="photoInput">
+      Upload Your Photo
+    </label>
+
     <input
       type="file"
       id="photoInput"
@@ -201,14 +265,20 @@
     >
 
     <div class="teacher-preview">
+
       <img
         id="photoPreview"
         class="hidden"
         alt="Teacher Preview"
       >
+
     </div>
 
-    <label for="voiceInput">Upload Your Voice Sample</label>
+
+    <label for="voiceInput">
+      Upload Your Voice Sample
+    </label>
+
     <input
       type="file"
       id="voiceInput"
@@ -218,9 +288,17 @@
     <audio
       id="voicePreview"
       class="hidden"
-      controls
-      style="width:100%; margin-top:12px;">
+      controls>
     </audio>
+
+
+    <button
+      id="playSampleButton"
+      class="warning-btn hidden"
+      type="button">
+      🔊 Play My Voice Sample
+    </button>
+
 
     <button
       id="recordButton"
@@ -229,87 +307,159 @@
       🎤 Record My Voice
     </button>
 
+
     <audio
       id="recordedVoice"
       class="hidden"
-      controls
-      style="width:100%; margin-top:12px;">
+      controls>
     </audio>
 
-    <div class="status" id="mediaStatus">
+
+    <button
+      id="useRecordedButton"
+      class="success hidden"
+      type="button">
+      ✅ Use Recorded Voice
+    </button>
+
+
+    <div
+      class="status"
+      id="mediaStatus">
       Photo और voice sample अभी upload नहीं किए गए हैं।
     </div>
 
+
     <div class="warning">
-      आपकी photo और voice इस browser में preview के लिए इस्तेमाल हो रही है।
-      Actual AI voice cloning के लिए बाद में authorized voice-TTS service/API जोड़नी होगी।
+
+      ⚠️ आपकी photo और voice इस browser में preview के लिए
+      इस्तेमाल हो रही है।
+
+      <br><br>
+
+      Uploaded voice sample को नई AI narration में बदलने के लिए
+      authorized Voice-TTS service/API की जरूरत होगी।
+
     </div>
+
   </div>
 
 
+  <!-- ============================= -->
   <!-- LESSON GENERATOR -->
+  <!-- ============================= -->
+
   <div class="card">
+
     <h2>📚 Generate Educational Content</h2>
 
-    <label for="topic">Enter Topic</label>
+    <label for="topic">
+      Enter Topic
+    </label>
+
     <input
       id="topic"
       type="text"
       placeholder="Example: Photosynthesis"
     >
 
-    <label for="language">Language</label>
+
+    <label for="language">
+      Language
+    </label>
+
     <select id="language">
-      <option value="English">English</option>
-      <option value="Hindi">Hindi</option>
+
+      <option value="English">
+        English
+      </option>
+
+      <option value="Hindi">
+        Hindi
+      </option>
+
     </select>
+
 
     <button
       id="generateButton"
       type="button">
+
       Generate Educational Lesson
+
     </button>
+
   </div>
 
 
+  <!-- ============================= -->
   <!-- LESSON -->
+  <!-- ============================= -->
+
   <div
     id="lessonSection"
     class="card hidden">
 
     <h2 id="lessonTitle"></h2>
 
+
     <p>
+
       <strong>Audience:</strong>
+
       <span id="audience"></span>
+
     </p>
 
-    <h3>🎯 Learning Objectives</h3>
+
+    <h3>
+      🎯 Learning Objectives
+    </h3>
+
     <div id="objectives"></div>
 
-    <h3>📖 Introduction</h3>
+
+    <h3>
+      📖 Introduction
+    </h3>
+
     <p id="introduction"></p>
 
-    <h3>🎬 Storyboard</h3>
+
+    <h3>
+      🎬 Storyboard
+    </h3>
+
     <div id="scenes"></div>
+
 
     <button
       id="videoButton"
       class="success"
       type="button">
+
       🎥 Create Educational Video
+
     </button>
+
   </div>
 
 
+  <!-- ============================= -->
   <!-- VIDEO -->
+  <!-- ============================= -->
+
   <div
     id="videoSection"
     class="card hidden">
 
-    <h2>🎥 Educational Video Preview</h2>
+    <h2>
+      🎥 Educational Video Preview
+    </h2>
+
 
     <div class="video-box">
+
 
       <img
         id="videoTeacher"
@@ -317,69 +467,95 @@
         alt="AI Teacher"
       >
 
+
       <h2
         id="videoSceneTitle"
         style="color:white;">
       </h2>
+
 
       <div
         id="videoText"
         class="video-text">
       </div>
 
+
       <div
         id="videoNarration"
-        style="font-size:14px; color:#cbd5e1;">
+        class="video-narration">
       </div>
 
+
       <div class="controls">
+
 
         <button
           id="previousButton"
           type="button">
+
           ◀ Previous
+
         </button>
+
 
         <button
           id="playButton"
           type="button">
+
           ▶ Play
+
         </button>
+
 
         <button
           id="pauseButton"
           type="button">
+
           ⏸ Pause
+
         </button>
+
 
         <button
           id="nextButton"
           type="button">
+
           Next ▶
+
         </button>
+
 
         <button
           id="restartButton"
           type="button">
+
           🔄 Restart
+
         </button>
+
 
         <button
           id="voiceButton"
           type="button">
+
           🔊 Voice
+
         </button>
 
+
       </div>
+
 
       <div
         id="videoStatus"
-        class="status"
-        style="margin-top:15px;">
+        class="status">
+
         Video ready.
+
       </div>
 
     </div>
+
   </div>
 
 </div>
@@ -387,108 +563,177 @@
 
 <script>
 
-  // -------------------------------
-  // GLOBAL DATA
-  // -------------------------------
+  // ==========================================
+  // GLOBAL VARIABLES
+  // ==========================================
 
   let currentScenes = [];
+
   let currentScene = 0;
+
   let playing = false;
+
   let playTimer = null;
 
   let teacherPhoto = null;
+
   let voiceSample = null;
+
   let recordedVoiceBlob = null;
 
+  let mediaRecorder = null;
 
-  // -------------------------------
+  let audioChunks = [];
+
+  let activeVoiceObjectUrl = null;
+
+
+  // ==========================================
   // PHOTO UPLOAD
-  // -------------------------------
+  // ==========================================
 
   document
     .getElementById("photoInput")
     .addEventListener("change", function(event) {
 
-      const file = event.target.files[0];
+      const file =
+        event.target.files[0];
 
       if (!file) return;
 
       teacherPhoto = file;
 
-      const url = URL.createObjectURL(file);
+      const url =
+        URL.createObjectURL(file);
 
       const preview =
         document.getElementById("photoPreview");
 
       preview.src = url;
+
       preview.classList.remove("hidden");
 
       updateMediaStatus();
+
     });
 
 
-  // -------------------------------
+  // ==========================================
   // VOICE UPLOAD
-  // -------------------------------
+  // ==========================================
 
   document
     .getElementById("voiceInput")
     .addEventListener("change", function(event) {
 
-      const file = event.target.files[0];
+      const file =
+        event.target.files[0];
 
       if (!file) return;
 
       voiceSample = file;
 
-      const url = URL.createObjectURL(file);
+      const url =
+        URL.createObjectURL(file);
 
       const audio =
         document.getElementById("voicePreview");
 
       audio.src = url;
+
       audio.classList.remove("hidden");
 
+
+      const playButton =
+        document.getElementById(
+          "playSampleButton"
+        );
+
+      playButton.classList.remove("hidden");
+
+
       updateMediaStatus();
+
     });
 
 
-  // -------------------------------
-  // VOICE RECORDING
-  // -------------------------------
+  // ==========================================
+  // PLAY UPLOADED VOICE SAMPLE
+  // ==========================================
 
-  let mediaRecorder = null;
-  let audioChunks = [];
+  document
+    .getElementById("playSampleButton")
+    .addEventListener("click", function() {
+
+      const audio =
+        document.getElementById("voicePreview");
+
+      if (!audio.src) {
+
+        alert(
+          "पहले voice sample upload करें।"
+        );
+
+        return;
+
+      }
+
+      audio.currentTime = 0;
+
+      audio.play();
+
+    });
+
+
+  // ==========================================
+  // RECORD VOICE
+  // ==========================================
 
   document
     .getElementById("recordButton")
     .addEventListener("click", async function() {
 
       const button =
-        document.getElementById("recordButton");
+        document.getElementById(
+          "recordButton"
+        );
+
 
       if (!mediaRecorder) {
 
         try {
 
           const stream =
-            await navigator.mediaDevices.getUserMedia({
-              audio: true
-            });
+            await navigator
+              .mediaDevices
+              .getUserMedia({
+                audio: true
+              });
+
 
           audioChunks = [];
+
 
           mediaRecorder =
             new MediaRecorder(stream);
 
+
           mediaRecorder.ondataavailable =
             function(event) {
 
-              if (event.data.size > 0) {
-                audioChunks.push(event.data);
+              if (
+                event.data &&
+                event.data.size > 0
+              ) {
+
+                audioChunks.push(
+                  event.data
+                );
+
               }
 
             };
+
 
           mediaRecorder.onstop =
             function() {
@@ -496,38 +741,67 @@
               recordedVoiceBlob =
                 new Blob(
                   audioChunks,
-                  { type: "audio/webm" }
+                  {
+                    type:
+                      "audio/webm"
+                  }
                 );
+
 
               const url =
                 URL.createObjectURL(
                   recordedVoiceBlob
                 );
 
+
               const audio =
                 document.getElementById(
                   "recordedVoice"
                 );
 
+
               audio.src = url;
-              audio.classList.remove("hidden");
+
+              audio.classList.remove(
+                "hidden"
+              );
+
+
+              document
+                .getElementById(
+                  "useRecordedButton"
+                )
+                .classList.remove(
+                  "hidden"
+                );
+
 
               stream
                 .getTracks()
-                .forEach(track => track.stop());
+                .forEach(
+                  track =>
+                    track.stop()
+                );
+
 
               button.textContent =
                 "🎤 Record My Voice";
 
+
               mediaRecorder = null;
 
+
               updateMediaStatus();
+
             };
+
 
           mediaRecorder.start();
 
+
           button.textContent =
             "⏹ Stop Recording";
+
 
         } catch (error) {
 
@@ -546,37 +820,96 @@
     });
 
 
-  // -------------------------------
+  // ==========================================
+  // USE RECORDED VOICE
+  // ==========================================
+
+  document
+    .getElementById(
+      "useRecordedButton"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        if (!recordedVoiceBlob) {
+
+          alert(
+            "पहले अपनी voice record करें।"
+          );
+
+          return;
+
+        }
+
+
+        voiceSample =
+          new File(
+            [recordedVoiceBlob],
+            "my-recorded-voice.webm",
+            {
+              type:
+                "audio/webm"
+            }
+          );
+
+
+        updateMediaStatus();
+
+
+        alert(
+          "✅ आपकी recorded voice sample ready है।"
+        );
+
+      }
+    );
+
+
+  // ==========================================
   // MEDIA STATUS
-  // -------------------------------
+  // ==========================================
 
   function updateMediaStatus() {
 
     const status =
-      document.getElementById("mediaStatus");
+      document.getElementById(
+        "mediaStatus"
+      );
+
 
     const photoText =
       teacherPhoto
         ? "✅ Photo ready"
         : "❌ Photo not selected";
 
+
     const voiceText =
-      voiceSample || recordedVoiceBlob
+      voiceSample ||
+      recordedVoiceBlob
         ? "✅ Voice sample ready"
         : "❌ Voice sample not selected";
 
+
     status.textContent =
-      photoText + " | " + voiceText;
+      photoText +
+      " | " +
+      voiceText;
+
   }
 
 
-  // -------------------------------
+  // ==========================================
   // GENERATE LESSON
-  // -------------------------------
+  // ==========================================
 
   document
-    .getElementById("generateButton")
-    .addEventListener("click", generateLesson);
+    .getElementById(
+      "generateButton"
+    )
+    .addEventListener(
+      "click",
+      generateLesson
+    );
 
 
   function generateLesson() {
@@ -587,328 +920,631 @@
         .value
         .trim();
 
+
     const language =
       document
         .getElementById("language")
         .value;
 
+
     if (!topic) {
 
-      alert("Please enter a topic.");
+      alert(
+        "Please enter a topic."
+      );
 
       return;
+
     }
 
 
     let title;
+
     let introduction;
+
     let objectives;
+
     let scenes;
 
+
+    // ========================================
+    // HINDI
+    // ========================================
 
     if (language === "Hindi") {
 
       title =
-        topic + " - शैक्षणिक पाठ";
+        topic +
+        " - शैक्षणिक पाठ";
+
 
       introduction =
         topic +
         " एक महत्वपूर्ण विषय है। इस पाठ में हम इसके मुख्य concepts को आसान भाषा में समझेंगे।";
 
+
       objectives = [
-        topic + " के मुख्य बिंदुओं को पहचानना",
-        topic + " की मूल अवधारणा समझना",
-        topic + " के वास्तविक जीवन में उपयोग को समझना"
+
+        topic +
+        " के मुख्य बिंदुओं को पहचानना",
+
+        topic +
+        " की मूल अवधारणा समझना",
+
+        topic +
+        " के वास्तविक जीवन में उपयोग को समझना"
+
       ];
+
 
       scenes = [
 
         {
-          title: "परिचय",
+
+          title:
+            "परिचय",
+
           text:
             "आज हम " +
             topic +
             " के बारे में सीखेंगे।",
+
           narration:
             "नमस्ते विद्यार्थियों। आज हम " +
             topic +
             " के बारे में सीखेंगे।"
+
         },
 
+
         {
-          title: "मुख्य अवधारणा",
+
+          title:
+            "मुख्य अवधारणा",
+
           text:
             topic +
             " की मूल अवधारणा को समझना महत्वपूर्ण है।",
+
           narration:
             topic +
             " को समझने के लिए पहले इसकी मूल अवधारणा को समझना जरूरी है।"
+
         },
 
+
         {
-          title: "कैसे काम करता है?",
+
+          title:
+            "कैसे काम करता है?",
+
           text:
             topic +
             " से जुड़ी प्रक्रिया को सरल उदाहरण से समझते हैं।",
+
           narration:
             "अब हम एक सरल उदाहरण की मदद से समझते हैं कि " +
             topic +
             " कैसे काम करता है।"
+
         },
 
+
         {
-          title: "उदाहरण",
+
+          title:
+            "उदाहरण",
+
           text:
             "एक वास्तविक जीवन के उदाहरण से " +
             topic +
             " को समझें।",
+
           narration:
             "अब एक वास्तविक जीवन के उदाहरण को देखते हैं ताकि concept और आसान हो जाए।"
+
         },
 
+
         {
-          title: "निष्कर्ष",
+
+          title:
+            "निष्कर्ष",
+
           text:
             "आज हमने " +
             topic +
             " के मुख्य points सीखे।",
+
           narration:
             "आज हमने " +
             topic +
             " के मुख्य points सीखे। उम्मीद है अब यह topic आपको आसानी से समझ में आ गया होगा।"
+
         }
 
       ];
 
-    } else {
+
+    }
+
+    // ========================================
+    // ENGLISH
+    // ========================================
+
+    else {
 
       title =
-        topic + " - Educational Lesson";
+        topic +
+        " - Educational Lesson";
+
 
       introduction =
         topic +
         " is an important educational topic. In this lesson, we will understand its key concepts using simple explanations and examples.";
 
+
       objectives = [
-        "Identify the main points of " + topic,
-        "Understand the basic concept of " + topic,
-        "Understand real-life applications of " + topic
+
+        "Identify the main points of " +
+        topic,
+
+        "Understand the basic concept of " +
+        topic,
+
+        "Understand real-life applications of " +
+        topic
+
       ];
+
 
       scenes = [
 
         {
-          title: "Introduction",
+
+          title:
+            "Introduction",
+
           text:
             "Today we will learn about " +
             topic +
             ".",
+
           narration:
             "Hello students. Today we will learn about " +
             topic +
             "."
+
         },
 
+
         {
-          title: "Main Concept",
+
+          title:
+            "Main Concept",
+
           text:
             "Let's understand the basic concept of " +
             topic +
             ".",
+
           narration:
             "First, let's understand the basic concept behind " +
             topic +
             "."
+
         },
 
+
         {
-          title: "How It Works",
+
+          title:
+            "How It Works",
+
           text:
             "Let's understand the process with a simple example.",
+
           narration:
             "Now let's understand how " +
             topic +
             " works with a simple example."
+
         },
 
+
         {
-          title: "Example",
+
+          title:
+            "Example",
+
           text:
             "A real-life example makes the concept easier.",
+
           narration:
             "A real-life example can help us understand this concept more clearly."
+
         },
 
+
         {
-          title: "Conclusion",
+
+          title:
+            "Conclusion",
+
           text:
             "Let's review the important points we learned.",
+
           narration:
             "Today we learned the important points about " +
             topic +
             ". I hope the concept is now easier to understand."
+
         }
 
       ];
+
     }
 
 
-    // Save scenes
+    // ========================================
+    // SAVE SCENES
+    // ========================================
 
-    currentScenes = scenes;
+    currentScenes =
+      scenes;
+
     currentScene = 0;
 
 
-    // Display lesson
+    // ========================================
+    // DISPLAY LESSON
+    // ========================================
 
-    document.getElementById("lessonTitle").textContent =
-      title;
+    document
+      .getElementById(
+        "lessonTitle"
+      )
+      .textContent =
+        title;
 
-    document.getElementById("audience").textContent =
-      "Students";
 
-    document.getElementById("introduction").textContent =
-      introduction;
+    document
+      .getElementById(
+        "audience"
+      )
+      .textContent =
+        "Students";
+
+
+    document
+      .getElementById(
+        "introduction"
+      )
+      .textContent =
+        introduction;
 
 
     const objectivesBox =
-      document.getElementById("objectives");
+      document.getElementById(
+        "objectives"
+      );
 
-    objectivesBox.innerHTML = "";
 
-    objectives.forEach(function(item) {
+    objectivesBox.innerHTML =
+      "";
 
-      const p =
-        document.createElement("p");
 
-      p.className = "objective";
+    objectives.forEach(
+      function(item) {
 
-      p.textContent = "• " + item;
+        const p =
+          document.createElement(
+            "p"
+          );
 
-      objectivesBox.appendChild(p);
 
-    });
+        p.className =
+          "objective";
 
+
+        p.textContent =
+          "• " +
+          item;
+
+
+        objectivesBox.appendChild(
+          p
+        );
+
+      }
+    );
+
+
+    // ========================================
+    // DISPLAY STORYBOARD
+    // ========================================
 
     const scenesBox =
-      document.getElementById("scenes");
+      document.getElementById(
+        "scenes"
+      );
 
-    scenesBox.innerHTML = "";
 
-    scenes.forEach(function(scene, index) {
+    scenesBox.innerHTML =
+      "";
 
-      const div =
-        document.createElement("div");
 
-      div.className = "scene";
+    scenes.forEach(
+      function(scene, index) {
 
-      div.innerHTML =
-        "<h3>Scene " +
-        (index + 1) +
-        ": " +
-        scene.title +
-        "</h3>" +
+        const div =
+          document.createElement(
+            "div"
+          );
 
-        "<p><strong>Visual:</strong> " +
-        scene.text +
-        "</p>" +
 
-        "<p><strong>Narration:</strong> " +
-        scene.narration +
-        "</p>";
+        div.className =
+          "scene";
 
-      scenesBox.appendChild(div);
 
-    });
+        const heading =
+          document.createElement(
+            "h3"
+          );
+
+
+        heading.textContent =
+          "Scene " +
+          (index + 1) +
+          ": " +
+          scene.title;
+
+
+        const visual =
+          document.createElement(
+            "p"
+          );
+
+
+        visual.innerHTML =
+          "<strong>Visual:</strong> " +
+          escapeHtml(
+            scene.text
+          );
+
+
+        const narration =
+          document.createElement(
+            "p"
+          );
+
+
+        narration.innerHTML =
+          "<strong>Narration:</strong> " +
+          escapeHtml(
+            scene.narration
+          );
+
+
+        div.appendChild(
+          heading
+        );
+
+        div.appendChild(
+          visual
+        );
+
+        div.appendChild(
+          narration
+        );
+
+
+        scenesBox.appendChild(
+          div
+        );
+
+      }
+    );
 
 
     document
-      .getElementById("lessonSection")
-      .classList.remove("hidden");
+      .getElementById(
+        "lessonSection"
+      )
+      .classList.remove(
+        "hidden"
+      );
+
 
     document
-      .getElementById("videoSection")
-      .classList.add("hidden");
+      .getElementById(
+        "videoSection"
+      )
+      .classList.add(
+        "hidden"
+      );
 
 
-    window.scrollTo({
-      top: document
-        .getElementById("lessonSection")
-        .offsetTop,
-      behavior: "smooth"
-    });
+    document
+      .getElementById(
+        "lessonSection"
+      )
+      .scrollIntoView({
+        behavior:
+          "smooth"
+      });
+
   }
 
 
-  // -------------------------------
+  // ==========================================
+  // ESCAPE HTML
+  // ==========================================
+
+  function escapeHtml(value) {
+
+    return String(value)
+
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+
+      .replace(
+        /</g,
+        "&lt;"
+      )
+
+      .replace(
+        />/g,
+        "&gt;"
+      )
+
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
+
+
+  // ==========================================
   // CREATE VIDEO
-  // -------------------------------
+  // ==========================================
 
   document
-    .getElementById("videoButton")
-    .addEventListener("click", function() {
+    .getElementById(
+      "videoButton"
+    )
+    .addEventListener(
+      "click",
+      function() {
 
-      if (currentScenes.length === 0) return;
+        if (
+          currentScenes.length === 0
+        ) {
 
-      document
-        .getElementById("videoSection")
-        .classList.remove("hidden");
+          alert(
+            "पहले lesson generate करें।"
+          );
 
-      setupTeacherPhoto();
+          return;
 
-      showScene();
-
-      window.scrollTo({
-        top: document
-          .getElementById("videoSection")
-          .offsetTop,
-        behavior: "smooth"
-      });
-
-    });
+        }
 
 
-  // -------------------------------
-  // TEACHER PHOTO IN VIDEO
-  // -------------------------------
+        document
+          .getElementById(
+            "videoSection"
+          )
+          .classList.remove(
+            "hidden"
+          );
+
+
+        setupTeacherPhoto();
+
+
+        currentScene = 0;
+
+
+        showScene();
+
+
+        document
+          .getElementById(
+            "videoSection"
+          )
+          .scrollIntoView({
+            behavior:
+              "smooth"
+          });
+
+      }
+    );
+
+
+  // ==========================================
+  // TEACHER PHOTO
+  // ==========================================
 
   function setupTeacherPhoto() {
 
     const img =
-      document.getElementById("videoTeacher");
+      document.getElementById(
+        "videoTeacher"
+      );
+
 
     if (teacherPhoto) {
 
-      img.src =
+      if (
+        activeVoiceObjectUrl
+      ) {
+
+        URL.revokeObjectURL(
+          activeVoiceObjectUrl
+        );
+
+      }
+
+
+      const url =
         URL.createObjectURL(
           teacherPhoto
         );
 
-      img.classList.remove("hidden");
+
+      img.src =
+        url;
+
+
+      img.classList.remove(
+        "hidden"
+      );
+
 
     } else {
 
-      img.classList.add("hidden");
+      img.classList.add(
+        "hidden"
+      );
 
     }
 
   }
 
 
-  // -------------------------------
+  // ==========================================
   // SHOW CURRENT SCENE
-  // -------------------------------
+  // ==========================================
 
   function showScene() {
 
-    if (!currentScenes.length) return;
+    if (
+      !currentScenes.length
+    ) {
+
+      return;
+
+    }
+
 
     const scene =
-      currentScenes[currentScene];
+      currentScenes[
+        currentScene
+      ];
 
 
     document
-      .getElementById("videoSceneTitle")
+      .getElementById(
+        "videoSceneTitle"
+      )
       .textContent =
         "Scene " +
         (currentScene + 1) +
@@ -917,19 +1553,25 @@
 
 
     document
-      .getElementById("videoText")
+      .getElementById(
+        "videoText"
+      )
       .textContent =
         scene.text;
 
 
     document
-      .getElementById("videoNarration")
+      .getElementById(
+        "videoNarration"
+      )
       .textContent =
         scene.narration;
 
 
     document
-      .getElementById("videoStatus")
+      .getElementById(
+        "videoStatus"
+      )
       .textContent =
         "Scene " +
         (currentScene + 1) +
@@ -939,96 +1581,20 @@
   }
 
 
-  // -------------------------------
+  // ==========================================
   // NEXT
-  // -------------------------------
+  // ==========================================
 
   document
-    .getElementById("nextButton")
-    .addEventListener("click", function() {
+    .getElementById(
+      "nextButton"
+    )
+    .addEventListener(
+      "click",
+      function() {
 
-      stopPlaying();
+        stopPlaying();
 
-      if (
-        currentScene <
-        currentScenes.length - 1
-      ) {
-
-        currentScene++;
-
-        showScene();
-
-      }
-
-    });
-
-
-  // -------------------------------
-  // PREVIOUS
-  // -------------------------------
-
-  document
-    .getElementById("previousButton")
-    .addEventListener("click", function() {
-
-      stopPlaying();
-
-      if (currentScene > 0) {
-
-        currentScene--;
-
-        showScene();
-
-      }
-
-    });
-
-
-  // -------------------------------
-  // RESTART
-  // -------------------------------
-
-  document
-    .getElementById("restartButton")
-    .addEventListener("click", function() {
-
-      stopPlaying();
-
-      currentScene = 0;
-
-      showScene();
-
-    });
-
-
-  // -------------------------------
-  // PLAY
-  // -------------------------------
-
-  document
-    .getElementById("playButton")
-    .addEventListener("click", playVideo);
-
-
-  function playVideo() {
-
-    if (!currentScenes.length) return;
-
-    if (playing) return;
-
-    playing = true;
-
-    document
-      .getElementById("videoStatus")
-      .textContent =
-        "▶ Playing...";
-
-
-    speakCurrentScene();
-
-
-    playTimer =
-      setInterval(function() {
 
         if (
           currentScene <
@@ -1039,79 +1605,247 @@
 
           showScene();
 
-          speakCurrentScene();
+        }
 
-        } else {
+      }
+    );
 
-          stopPlaying();
 
-          document
-            .getElementById("videoStatus")
-            .textContent =
-              "✅ Video completed.";
+  // ==========================================
+  // PREVIOUS
+  // ==========================================
+
+  document
+    .getElementById(
+      "previousButton"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        stopPlaying();
+
+
+        if (
+          currentScene > 0
+        ) {
+
+          currentScene--;
+
+          showScene();
 
         }
 
-      }, 5000);
+      }
+    );
+
+
+  // ==========================================
+  // RESTART
+  // ==========================================
+
+  document
+    .getElementById(
+      "restartButton"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        stopPlaying();
+
+
+        currentScene =
+          0;
+
+
+        showScene();
+
+      }
+    );
+
+
+  // ==========================================
+  // PLAY
+  // ==========================================
+
+  document
+    .getElementById(
+      "playButton"
+    )
+    .addEventListener(
+      "click",
+      playVideo
+    );
+
+
+  function playVideo() {
+
+    if (
+      !currentScenes.length
+    ) {
+
+      return;
+
+    }
+
+
+    if (playing) {
+
+      return;
+
+    }
+
+
+    playing =
+      true;
+
+
+    document
+      .getElementById(
+        "videoStatus"
+      )
+      .textContent =
+        "▶ Playing...";
+
+
+    speakCurrentScene();
+
+
+    playTimer =
+      setInterval(
+        function() {
+
+
+          if (
+            currentScene <
+            currentScenes.length - 1
+          ) {
+
+            currentScene++;
+
+            showScene();
+
+            speakCurrentScene();
+
+
+          } else {
+
+            stopPlaying();
+
+
+            document
+              .getElementById(
+                "videoStatus"
+              )
+              .textContent =
+                "✅ Video completed.";
+
+          }
+
+
+        },
+        5000
+      );
 
   }
 
 
-  // -------------------------------
+  // ==========================================
   // PAUSE
-  // -------------------------------
+  // ==========================================
 
   document
-    .getElementById("pauseButton")
-    .addEventListener("click", stopPlaying);
+    .getElementById(
+      "pauseButton"
+    )
+    .addEventListener(
+      "click",
+      stopPlaying
+    );
 
 
   function stopPlaying() {
 
-    playing = false;
+    playing =
+      false;
+
 
     if (playTimer) {
 
-      clearInterval(playTimer);
+      clearInterval(
+        playTimer
+      );
 
-      playTimer = null;
+
+      playTimer =
+        null;
 
     }
 
-    if ("speechSynthesis" in window) {
+
+    if (
+      "speechSynthesis"
+      in window
+    ) {
 
       speechSynthesis.cancel();
 
     }
 
+
     document
-      .getElementById("videoStatus")
+      .getElementById(
+        "videoStatus"
+      )
       .textContent =
         "⏸ Paused";
 
   }
 
 
-  // -------------------------------
-  // BROWSER VOICE
-  // -------------------------------
+  // ==========================================
+  // VOICE BUTTON
+  // ==========================================
 
   document
-    .getElementById("voiceButton")
-    .addEventListener("click", speakCurrentScene);
+    .getElementById(
+      "voiceButton"
+    )
+    .addEventListener(
+      "click",
+      speakCurrentScene
+    );
 
+
+  // ==========================================
+  // BROWSER VOICE
+  // ==========================================
 
   function speakCurrentScene() {
 
-    if (!currentScenes.length) return;
+    if (
+      !currentScenes.length
+    ) {
 
-    if (!("speechSynthesis" in window)) {
+      return;
+
+    }
+
+
+    if (
+      !(
+        "speechSynthesis"
+        in window
+      )
+    ) {
 
       alert(
         "इस browser में speech voice available नहीं है।"
       );
 
       return;
+
     }
 
 
@@ -1119,17 +1853,22 @@
 
 
     const text =
-      currentScenes[currentScene]
-        .narration;
+      currentScenes[
+        currentScene
+      ].narration;
 
 
     const speech =
-      new SpeechSynthesisUtterance(text);
+      new SpeechSynthesisUtterance(
+        text
+      );
 
 
     const language =
       document
-        .getElementById("language")
+        .getElementById(
+          "language"
+        )
         .value;
 
 
@@ -1139,16 +1878,71 @@
         : "en-US";
 
 
-    speech.rate = 0.9;
-    speech.pitch = 1;
+    speech.rate =
+      0.9;
 
 
-    speechSynthesis.speak(speech);
+    speech.pitch =
+      1;
+
+
+    speech.volume =
+      1;
+
+
+    speech.onstart =
+      function() {
+
+        document
+          .getElementById(
+            "videoStatus"
+          )
+          .textContent =
+            "🔊 Voice playing...";
+
+      };
+
+
+    speech.onend =
+      function() {
+
+        if (!playing) {
+
+          document
+            .getElementById(
+              "videoStatus"
+            )
+            .textContent =
+              "✅ Voice completed.";
+
+        }
+
+      };
+
+
+    speech.onerror =
+      function() {
+
+        document
+          .getElementById(
+            "videoStatus"
+          )
+          .textContent =
+            "❌ Voice playback failed.";
+
+      };
+
+
+    speechSynthesis.speak(
+      speech
+    );
 
   }
 
 
-  // Initial status
+  // ==========================================
+  // INITIAL STATUS
+  // ==========================================
 
   updateMediaStatus();
 
