@@ -3,24 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>TeachGenAI</title>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
 
 body{
   margin:0;
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
   background:#f5f7fb;
   color:#172033;
 }
 
 header{
-  background:#ffffff;
-  padding:18px 25px;
-  border-bottom:1px solid #e5e7eb;
+  background:white;
+  padding:18px 20px;
+  border-bottom:1px solid #ddd;
   position:sticky;
   top:0;
   z-index:10;
@@ -28,7 +30,7 @@ header{
 
 header h1{
   margin:0;
-  font-size:25px;
+  font-size:28px;
 }
 
 header p{
@@ -37,9 +39,9 @@ header p{
 }
 
 .container{
-  max-width:1100px;
+  max-width:1000px;
   margin:auto;
-  padding:25px 16px 60px;
+  padding:20px 15px 60px;
 }
 
 .card{
@@ -60,36 +62,31 @@ label{
   margin:12px 0 7px;
 }
 
-input,select,textarea{
+input,select{
   width:100%;
   padding:12px;
   border:1px solid #d0d5dd;
   border-radius:10px;
-  font-size:15px;
-}
-
-textarea{
-  min-height:100px;
-  resize:vertical;
+  font-size:16px;
 }
 
 button{
   border:0;
   border-radius:10px;
-  padding:11px 16px;
-  cursor:pointer;
+  padding:12px 16px;
+  margin:5px 4px 5px 0;
+  font-size:15px;
   font-weight:bold;
-  margin:5px 5px 5px 0;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.5;
 }
 
 .primary{
   background:#2563eb;
   color:white;
-}
-
-.secondary{
-  background:#eef2ff;
-  color:#3730a3;
 }
 
 .success{
@@ -107,12 +104,39 @@ button{
   color:#344054;
 }
 
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
+.secondary{
+  background:#eef2ff;
+  color:#3730a3;
 }
 
-.preview-photo{
+.status{
+  margin-top:12px;
+  padding:12px;
+  border-radius:10px;
+  background:#f2f4f7;
+}
+
+.warning{
+  background:#fff7ed;
+  color:#9a3412;
+  padding:13px;
+  border-radius:10px;
+  margin-top:12px;
+}
+
+.successBox{
+  background:#ecfdf3;
+  color:#166534;
+  padding:13px;
+  border-radius:10px;
+  margin-top:12px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.photo{
   width:120px;
   height:120px;
   object-fit:cover;
@@ -121,78 +145,61 @@ button:disabled{
   margin-top:10px;
 }
 
-.status{
-  padding:10px 12px;
-  border-radius:10px;
-  background:#f2f4f7;
-  margin-top:10px;
-  font-size:14px;
-}
-
 .scene{
-  border:1px solid #e4e7ec;
+  background:#fafbfc;
+  border:1px solid #e1e5ea;
   border-radius:14px;
   padding:16px;
   margin-top:15px;
-  background:#fafbfc;
 }
 
 .scene h3{
   margin-top:0;
 }
 
-.scene-number{
-  color:#2563eb;
-  font-weight:bold;
-}
-
-.scene-text{
-  margin:8px 0;
-}
-
-.scene-voice{
-  margin-top:12px;
-  padding:12px;
-  border-radius:10px;
+.sceneVoice{
   background:white;
-  border:1px solid #e4e7ec;
+  border:1px solid #e1e5ea;
+  border-radius:12px;
+  padding:12px;
+  margin-top:15px;
 }
 
-.scene-record-status{
-  font-size:13px;
+.sceneStatus{
+  margin:8px 0;
   color:#667085;
-  margin:6px 0;
 }
 
-audio{
+video{
   width:100%;
-  margin-top:8px;
+  max-height:400px;
+  border-radius:12px;
+  background:#111827;
 }
 
-.video-box{
+.preview{
   background:#111827;
   color:white;
   border-radius:16px;
-  padding:20px;
-  min-height:280px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  padding:25px 15px;
   text-align:center;
+  min-height:250px;
 }
 
-.video-photo{
+.preview img{
   max-width:100%;
-  max-height:260px;
+  max-height:180px;
   border-radius:12px;
   display:none;
+  margin:auto;
 }
 
-.video-content{
-  width:100%;
+.previewText{
+  margin-top:15px;
 }
 
 .timeline{
+  width:100%;
   margin-top:15px;
 }
 
@@ -202,26 +209,6 @@ audio{
 
 .controls{
   text-align:center;
-  margin-top:15px;
-}
-
-.hidden{
-  display:none !important;
-}
-
-.warning{
-  background:#fff7ed;
-  color:#9a3412;
-  padding:12px;
-  border-radius:10px;
-  margin-top:12px;
-}
-
-.success-box{
-  background:#ecfdf3;
-  color:#166534;
-  padding:12px;
-  border-radius:10px;
   margin-top:12px;
 }
 
@@ -230,325 +217,457 @@ audio{
   color:#667085;
 }
 
-@media(max-width:600px){
-  header{
-    padding:15px;
-  }
-
-  .container{
-    padding:16px 10px 40px;
-  }
-
-  .card{
-    padding:15px;
-  }
-
-  button{
-    width:100%;
-    margin-right:0;
-  }
-}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>🎓 TeachGenAI</h1>
-  <p>AI Educational Video Generator</p>
+
+<h1>🎓 TeachGenAI</h1>
+
+<p>AI Educational Video Generator</p>
+
 </header>
+
 
 <div class="container">
 
-<!-- TEACHER PROFILE -->
-<div class="card">
-  <h2>👨‍🏫 Teacher Profile</h2>
 
-  <label>Teacher Photo</label>
-  <input type="file" id="photoInput" accept="image/*">
+<!-- =====================================================
+     TEACHER PROFILE
+===================================================== -->
 
-  <img id="photoPreview" class="preview-photo">
-
-  <label>Voice Sample</label>
-  <input type="file" id="voiceInput" accept="audio/*">
-
-  <audio id="voiceSamplePlayer" controls class="hidden"></audio>
-
-  <div>
-    <button class="secondary" id="recordVoiceBtn">
-      🎙️ Record My Voice
-    </button>
-
-    <button class="danger hidden" id="stopVoiceBtn">
-      ⏹ Stop Recording
-    </button>
-
-    <button class="secondary hidden" id="playRecordedVoiceBtn">
-      ▶ Play My Voice
-    </button>
-
-    <button class="secondary hidden" id="useRecordedVoiceBtn">
-      ✅ Use Recorded Voice
-    </button>
-  </div>
-
-  <div id="voiceStatus" class="status">
-    No voice selected.
-  </div>
-</div>
-
-
-<!-- LESSON GENERATOR -->
 <div class="card">
 
-  <h2>📚 Generate Educational Lesson</h2>
+<h2>👨‍🏫 Teacher Profile</h2>
 
-  <label>Topic</label>
-  <input
-    id="topicInput"
-    type="text"
-    placeholder="Example: Photosynthesis"
-  >
+<label>Teacher Photo</label>
 
-  <label>Language</label>
-  <select id="languageInput">
-    <option value="English">English</option>
-    <option value="Hindi">Hindi</option>
-  </select>
+<input
+  type="file"
+  id="photoInput"
+  accept="image/*"
+>
 
-  <button class="primary" id="generateBtn">
-    ✨ Generate Lesson
-  </button>
+<img
+  id="photoPreview"
+  class="photo"
+>
 
-  <div id="generationStatus" class="status hidden"></div>
+
+<label>Voice Sample</label>
+
+<input
+  type="file"
+  id="voiceInput"
+  accept="audio/*"
+>
+
+<audio
+  id="voicePlayer"
+  controls
+  class="hidden"
+></audio>
+
+
+<div>
+
+<button
+  id="recordGeneralBtn"
+  class="secondary"
+>
+🎙️ Record My Voice
+</button>
+
+<button
+  id="stopGeneralBtn"
+  class="danger hidden"
+>
+⏹ Stop Recording
+</button>
+
+<button
+  id="playGeneralBtn"
+  class="secondary hidden"
+>
+▶ Play My Voice
+</button>
+
+</div>
+
+<div
+  id="generalVoiceStatus"
+  class="status"
+>
+No voice recording selected.
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+     LESSON
+===================================================== -->
+
+<div class="card">
+
+<h2>📚 Generate Educational Lesson</h2>
+
+<label>Topic</label>
+
+<input
+  id="topicInput"
+  placeholder="Example: Photosynthesis"
+>
+
+
+<label>Language</label>
+
+<select id="languageInput">
+
+<option value="English">
+English
+</option>
+
+<option value="Hindi">
+Hindi
+</option>
+
+</select>
+
+
+<button
+  id="generateBtn"
+  class="primary"
+>
+✨ Generate Lesson
+</button>
+
+
+<div
+  id="generationStatus"
+  class="status hidden"
+></div>
 
 </div>
 
 
-<!-- LESSON -->
-<div id="lessonSection" class="card hidden">
 
-  <h2>📖 Lesson Plan</h2>
+<!-- =====================================================
+     LESSON RESULT
+===================================================== -->
 
-  <div id="lessonContent"></div>
+<div
+  id="lessonSection"
+  class="card hidden"
+>
 
-  <button class="success" id="createVideoBtn">
-    🎬 Create Educational Video
-  </button>
+<h2>📖 Lesson Plan</h2>
+
+<div id="lessonContent"></div>
+
+<button
+  id="createVideoBtn"
+  class="success"
+>
+🎬 Create Educational Video
+</button>
+
+</div>
+
+
+
+<!-- =====================================================
+     STORYBOARD
+===================================================== -->
+
+<div
+  id="storyboardSection"
+  class="card hidden"
+>
+
+<h2>🎞️ Scene-by-Scene Storyboard</h2>
+
+<div
+  id="scenesContainer"
+></div>
 
 </div>
 
 
-<!-- STORYBOARD -->
-<div id="storyboardSection" class="card hidden">
 
-  <h2>🎞️ Scene-by-Scene Storyboard</h2>
+<!-- =====================================================
+     VIDEO PREVIEW
+===================================================== -->
 
-  <div id="scenesContainer"></div>
+<div
+  id="videoSection"
+  class="card hidden"
+>
+
+<h2>🎥 Educational Video Preview</h2>
+
+
+<div class="preview">
+
+<img
+  id="videoPhoto"
+>
+
+<h2 id="videoTitle">
+Scene 1
+</h2>
+
+<div
+  id="videoText"
+  class="previewText"
+></div>
+
+<p
+  id="videoNarration"
+></p>
+
+</div>
+
+
+<input
+  id="timeline"
+  class="timeline"
+  type="range"
+  min="0"
+  max="0"
+  value="0"
+>
+
+
+<div class="controls">
+
+<button
+  id="previousBtn"
+  class="gray"
+>
+⏮ Previous
+</button>
+
+<button
+  id="playBtn"
+  class="primary"
+>
+▶ Play
+</button>
+
+<button
+  id="pauseBtn"
+  class="gray"
+>
+⏸ Pause
+</button>
+
+<button
+  id="nextBtn"
+  class="gray"
+>
+Next ⏭
+</button>
+
+<button
+  id="restartBtn"
+  class="secondary"
+>
+🔄 Restart
+</button>
 
 </div>
 
 
-<!-- VIDEO PREVIEW -->
-<div id="videoSection" class="card hidden">
+<div
+  id="videoStatus"
+  class="status"
+>
+Ready.
+</div>
 
-  <h2>🎥 Educational Video Preview</h2>
 
-  <div class="video-box">
+<div class="warning">
 
-    <div class="video-content">
+⚠️ <b>AI voice is disabled.</b>
 
-      <img
-        id="videoPhoto"
-        class="video-photo"
-        alt="Teacher"
-      >
+<br><br>
 
-      <h2 id="videoSceneTitle">Scene 1</h2>
+Only your own recorded scene voice will be used.
+If a scene has no recording, it will remain silent.
 
-      <p id="videoSceneText">
-        Video preview will appear here.
-      </p>
+</div>
 
-      <p id="videoNarration"></p>
 
-    </div>
+<div class="successBox">
 
-  </div>
-
-  <div class="timeline">
-    <input
-      id="timeline"
-      type="range"
-      min="0"
-      max="0"
-      value="0"
-    >
-  </div>
-
-  <div class="controls">
-
-    <button class="gray" id="prevBtn">
-      ⏮ Previous
-    </button>
-
-    <button class="primary" id="playBtn">
-      ▶ Play
-    </button>
-
-    <button class="gray" id="pauseBtn">
-      ⏸ Pause
-    </button>
-
-    <button class="gray" id="nextBtn">
-      Next ⏭
-    </button>
-
-    <button class="secondary" id="restartBtn">
-      🔄 Restart
-    </button>
-
-  </div>
-
-  <div id="videoStatus" class="status">
-    Ready.
-  </div>
-
-  <div class="success-box">
-    🎙️ Video narration uses your recorded scene voice whenever
-    available. If a scene has no recording, browser speech is used.
-  </div>
+🎙️ Record your voice separately for each scene.
+Your recording is saved in this browser.
 
 </div>
 
 </div>
+
+</div>
+
 
 
 <script>
 
-/* =========================================================
-   BASIC VARIABLES
-========================================================= */
+/* =====================================================
+   VARIABLES
+===================================================== */
 
 let currentScenes = [];
+
 let currentScene = 0;
+
 let playing = false;
 
-let teacherPhoto = null;
-let voiceSample = null;
 
-let recordedVoiceBlob = null;
-let mediaRecorder = null;
-let audioChunks = [];
-let activeVoiceObjectUrl = null;
+/* Teacher */
+
+let teacherPhoto = null;
+
+let generalVoiceBlob = null;
+
+let generalRecorder = null;
+
+let generalChunks = [];
+
+let generalVoiceUrl = null;
+
+
+/* Scene voices */
 
 let sceneAudioBlobs = [];
+
 let sceneAudioUrls = [];
+
 let sceneAudioElements = [];
 
 let sceneRecorder = null;
-let sceneRecordingChunks = [];
-let sceneRecordingIndex = -1;
-let sceneRecordingStream = null;
 
-let currentSpeech = null;
+let sceneChunks = [];
+
+let recordingSceneIndex = -1;
+
+let recordingStream = null;
 
 
-/* =========================================================
+/* Database */
+
+let db = null;
+
+const DB_NAME = "TeachGenAI_Voices";
+
+const STORE_NAME = "sceneVoices";
+
+
+
+/* =====================================================
    ELEMENTS
-========================================================= */
+===================================================== */
 
-const photoInput = document.getElementById("photoInput");
-const photoPreview = document.getElementById("photoPreview");
+const photoInput =
+document.getElementById("photoInput");
 
-const voiceInput = document.getElementById("voiceInput");
-const voiceSamplePlayer =
-  document.getElementById("voiceSamplePlayer");
+const photoPreview =
+document.getElementById("photoPreview");
 
-const recordVoiceBtn =
-  document.getElementById("recordVoiceBtn");
+const voiceInput =
+document.getElementById("voiceInput");
 
-const stopVoiceBtn =
-  document.getElementById("stopVoiceBtn");
+const voicePlayer =
+document.getElementById("voicePlayer");
 
-const playRecordedVoiceBtn =
-  document.getElementById("playRecordedVoiceBtn");
+const recordGeneralBtn =
+document.getElementById("recordGeneralBtn");
 
-const useRecordedVoiceBtn =
-  document.getElementById("useRecordedVoiceBtn");
+const stopGeneralBtn =
+document.getElementById("stopGeneralBtn");
 
-const voiceStatus =
-  document.getElementById("voiceStatus");
+const playGeneralBtn =
+document.getElementById("playGeneralBtn");
+
+const generalVoiceStatus =
+document.getElementById("generalVoiceStatus");
 
 const topicInput =
-  document.getElementById("topicInput");
+document.getElementById("topicInput");
 
 const languageInput =
-  document.getElementById("languageInput");
+document.getElementById("languageInput");
 
 const generateBtn =
-  document.getElementById("generateBtn");
+document.getElementById("generateBtn");
 
 const generationStatus =
-  document.getElementById("generationStatus");
+document.getElementById("generationStatus");
 
 const lessonSection =
-  document.getElementById("lessonSection");
+document.getElementById("lessonSection");
 
 const lessonContent =
-  document.getElementById("lessonContent");
+document.getElementById("lessonContent");
 
 const createVideoBtn =
-  document.getElementById("createVideoBtn");
+document.getElementById("createVideoBtn");
 
 const storyboardSection =
-  document.getElementById("storyboardSection");
+document.getElementById("storyboardSection");
 
 const scenesContainer =
-  document.getElementById("scenesContainer");
+document.getElementById("scenesContainer");
 
 const videoSection =
-  document.getElementById("videoSection");
+document.getElementById("videoSection");
 
 const videoPhoto =
-  document.getElementById("videoPhoto");
+document.getElementById("videoPhoto");
 
-const videoSceneTitle =
-  document.getElementById("videoSceneTitle");
+const videoTitle =
+document.getElementById("videoTitle");
 
-const videoSceneText =
-  document.getElementById("videoSceneText");
+const videoText =
+document.getElementById("videoText");
 
 const videoNarration =
-  document.getElementById("videoNarration");
+document.getElementById("videoNarration");
 
 const timeline =
-  document.getElementById("timeline");
+document.getElementById("timeline");
 
-const prevBtn =
-  document.getElementById("prevBtn");
+const previousBtn =
+document.getElementById("previousBtn");
 
 const playBtn =
-  document.getElementById("playBtn");
+document.getElementById("playBtn");
 
 const pauseBtn =
-  document.getElementById("pauseBtn");
+document.getElementById("pauseBtn");
 
 const nextBtn =
-  document.getElementById("nextBtn");
+document.getElementById("nextBtn");
 
 const restartBtn =
-  document.getElementById("restartBtn");
+document.getElementById("restartBtn");
 
 const videoStatus =
-  document.getElementById("videoStatus");
+document.getElementById("videoStatus");
 
 
-/* =========================================================
+
+/* =====================================================
    PHOTO
-========================================================= */
+===================================================== */
 
-photoInput.addEventListener("change", function(){
+photoInput.addEventListener(
+"change",
+function(){
 
   const file = this.files[0];
 
@@ -556,331 +675,397 @@ photoInput.addEventListener("change", function(){
 
   teacherPhoto = file;
 
-  const url = URL.createObjectURL(file);
+  const url =
+  URL.createObjectURL(file);
 
   photoPreview.src = url;
-  photoPreview.style.display = "block";
+
+  photoPreview.style.display =
+  "block";
 
   videoPhoto.src = url;
-  videoPhoto.style.display = "block";
+
+  videoPhoto.style.display =
+  "block";
 
 });
 
 
-/* =========================================================
-   VOICE FILE
-========================================================= */
 
-voiceInput.addEventListener("change", function(){
+/* =====================================================
+   GENERAL VOICE FILE
+===================================================== */
+
+voiceInput.addEventListener(
+"change",
+function(){
 
   const file = this.files[0];
 
   if(!file) return;
 
-  voiceSample = file;
+  voicePlayer.src =
+  URL.createObjectURL(file);
 
-  const url = URL.createObjectURL(file);
+  voicePlayer.classList.remove(
+    "hidden"
+  );
 
-  voiceSamplePlayer.src = url;
-  voiceSamplePlayer.classList.remove("hidden");
-
-  voiceStatus.textContent =
-    "Voice sample ready.";
+  generalVoiceStatus.textContent =
+  "Voice sample ready.";
 
 });
 
 
-/* =========================================================
-   GENERAL VOICE RECORDING
-========================================================= */
 
-recordVoiceBtn.addEventListener("click", async function(){
+/* =====================================================
+   GENERAL VOICE RECORDING
+===================================================== */
+
+recordGeneralBtn.addEventListener(
+"click",
+async function(){
 
   try{
 
     const stream =
-      await navigator.mediaDevices.getUserMedia({
-        audio:true
-      });
+    await navigator.mediaDevices
+    .getUserMedia({
+      audio:true
+    });
 
-    audioChunks = [];
+    generalChunks = [];
 
-    mediaRecorder =
-      new MediaRecorder(stream);
+    generalRecorder =
+    new MediaRecorder(stream);
 
-    mediaRecorder.ondataavailable =
-      function(event){
+    generalRecorder.ondataavailable =
+    function(event){
 
-        if(event.data.size > 0){
-          audioChunks.push(event.data);
-        }
+      if(event.data.size > 0){
 
-      };
-
-    mediaRecorder.onstop =
-      function(){
-
-        recordedVoiceBlob =
-          new Blob(audioChunks,{
-            type:"audio/webm"
-          });
-
-        if(activeVoiceObjectUrl){
-          URL.revokeObjectURL(activeVoiceObjectUrl);
-        }
-
-        activeVoiceObjectUrl =
-          URL.createObjectURL(recordedVoiceBlob);
-
-        voiceSamplePlayer.src =
-          activeVoiceObjectUrl;
-
-        voiceSamplePlayer.classList.remove("hidden");
-
-        playRecordedVoiceBtn
-          .classList.remove("hidden");
-
-        useRecordedVoiceBtn
-          .classList.remove("hidden");
-
-        voiceStatus.textContent =
-          "Your recorded voice is ready.";
-
-        stream.getTracks().forEach(track =>
-          track.stop()
+        generalChunks.push(
+          event.data
         );
 
-      };
+      }
 
-    mediaRecorder.start();
+    };
 
-    recordVoiceBtn.classList.add("hidden");
-    stopVoiceBtn.classList.remove("hidden");
 
-    voiceStatus.textContent =
-      "🎙️ Recording...";
+    generalRecorder.onstop =
+    function(){
 
-  }catch(error){
+      generalVoiceBlob =
+      new Blob(
+        generalChunks,
+        {
+          type:"audio/webm"
+        }
+      );
+
+      generalVoiceUrl =
+      URL.createObjectURL(
+        generalVoiceBlob
+      );
+
+      voicePlayer.src =
+      generalVoiceUrl;
+
+      voicePlayer.classList.remove(
+        "hidden"
+      );
+
+      playGeneralBtn.classList.remove(
+        "hidden"
+      );
+
+      generalVoiceStatus.textContent =
+      "✅ Your voice recording is ready.";
+
+      stream.getTracks()
+      .forEach(
+        track => track.stop()
+      );
+
+    };
+
+
+    generalRecorder.start();
+
+    recordGeneralBtn.classList.add(
+      "hidden"
+    );
+
+    stopGeneralBtn.classList.remove(
+      "hidden"
+    );
+
+    generalVoiceStatus.textContent =
+    "🔴 Recording... Speak now.";
+
+  }
+
+  catch(error){
 
     console.error(error);
 
-    voiceStatus.textContent =
-      "Microphone permission was not granted.";
+    generalVoiceStatus.textContent =
+    "❌ Microphone permission denied.";
 
   }
 
 });
 
 
-stopVoiceBtn.addEventListener("click", function(){
+stopGeneralBtn.addEventListener(
+"click",
+function(){
 
-  if(mediaRecorder &&
-     mediaRecorder.state !== "inactive"){
+  if(
+    generalRecorder &&
+    generalRecorder.state !== "inactive"
+  ){
 
-    mediaRecorder.stop();
+    generalRecorder.stop();
 
   }
 
-  recordVoiceBtn.classList.remove("hidden");
-  stopVoiceBtn.classList.add("hidden");
+  recordGeneralBtn.classList.remove(
+    "hidden"
+  );
+
+  stopGeneralBtn.classList.add(
+    "hidden"
+  );
 
 });
 
 
-playRecordedVoiceBtn.addEventListener("click", function(){
+playGeneralBtn.addEventListener(
+"click",
+function(){
 
-  if(!activeVoiceObjectUrl) return;
+  if(generalVoiceUrl){
 
-  voiceSamplePlayer.src =
-    activeVoiceObjectUrl;
+    voicePlayer.src =
+    generalVoiceUrl;
 
-  voiceSamplePlayer.play();
+    voicePlayer.play();
 
-});
-
-
-useRecordedVoiceBtn.addEventListener("click", function(){
-
-  if(!recordedVoiceBlob) return;
-
-  voiceSample =
-    new File(
-      [recordedVoiceBlob],
-      "my-recorded-voice.webm",
-      {
-        type:"audio/webm"
-      }
-    );
-
-  voiceStatus.textContent =
-    "✅ Recorded voice selected.";
+  }
 
 });
 
 
-/* =========================================================
-   DATABASE
-========================================================= */
 
-const DB_NAME = "TeachGenAI_DB";
-const DB_VERSION = 1;
-const STORE_NAME = "sceneVoices";
+/* =====================================================
+   INDEXED DB
+===================================================== */
 
-let db = null;
+function openDatabase(){
 
-
-function openVoiceDatabase(){
-
-  return new Promise((resolve,reject)=>{
+  return new Promise(
+  function(resolve,reject){
 
     const request =
-      indexedDB.open(
-        DB_NAME,
-        DB_VERSION
-      );
+    indexedDB.open(
+      DB_NAME,
+      1
+    );
+
 
     request.onupgradeneeded =
-      function(event){
+    function(event){
 
-        const database =
-          event.target.result;
+      const database =
+      event.target.result;
 
-        if(!database.objectStoreNames.contains(STORE_NAME)){
+      if(
+        !database.objectStoreNames
+        .contains(STORE_NAME)
+      ){
 
-          database.createObjectStore(
-            STORE_NAME
-          );
+        database.createObjectStore(
+          STORE_NAME
+        );
 
-        }
+      }
 
-      };
+    };
+
 
     request.onsuccess =
-      function(event){
+    function(event){
 
-        db = event.target.result;
+      db =
+      event.target.result;
 
-        resolve(db);
+      resolve(db);
 
-      };
+    };
+
 
     request.onerror =
-      function(){
+    function(){
 
-        reject(request.error);
+      reject(
+        request.error
+      );
 
-      };
+    };
 
   });
 
 }
 
 
-function saveSceneVoice(index,blob){
 
-  return new Promise((resolve,reject)=>{
+function saveSceneVoice(
+index,
+blob
+){
+
+  return new Promise(
+  function(resolve,reject){
 
     if(!db){
-      reject("Database not ready");
+
+      reject(
+        "Database not ready"
+      );
+
       return;
+
     }
 
     const transaction =
-      db.transaction(
-        STORE_NAME,
-        "readwrite"
-      );
+    db.transaction(
+      STORE_NAME,
+      "readwrite"
+    );
 
     const store =
-      transaction.objectStore(
-        STORE_NAME
-      );
+    transaction.objectStore(
+      STORE_NAME
+    );
 
     store.put(
       blob,
       String(index)
     );
 
+
     transaction.oncomplete =
-      () => resolve();
+    function(){
+
+      resolve();
+
+    };
+
 
     transaction.onerror =
-      () => reject(transaction.error);
+    function(){
+
+      reject(
+        transaction.error
+      );
+
+    };
 
   });
 
 }
 
 
-function getSceneVoice(index){
 
-  return new Promise((resolve,reject)=>{
+function getSceneVoice(
+index
+){
+
+  return new Promise(
+  function(resolve,reject){
 
     if(!db){
+
       resolve(null);
+
       return;
+
     }
 
     const transaction =
-      db.transaction(
-        STORE_NAME,
-        "readonly"
-      );
+    db.transaction(
+      STORE_NAME,
+      "readonly"
+    );
 
     const store =
-      transaction.objectStore(
-        STORE_NAME
-      );
+    transaction.objectStore(
+      STORE_NAME
+    );
 
     const request =
-      store.get(String(index));
+    store.get(
+      String(index)
+    );
+
 
     request.onsuccess =
-      () => resolve(request.result || null);
+    function(){
+
+      resolve(
+        request.result || null
+      );
+
+    };
+
 
     request.onerror =
-      () => reject(request.error);
+    function(){
+
+      reject(
+        request.error
+      );
+
+    };
 
   });
 
 }
 
 
-/* =========================================================
+
+/* =====================================================
    LOAD SAVED VOICES
-========================================================= */
+===================================================== */
 
-async function loadSavedSceneVoices(){
+async function loadSavedVoices(){
 
-  if(!db) return;
+  sceneAudioBlobs = [];
 
-  for(let i=0;i<20;i++){
+  sceneAudioUrls = [];
 
-    try{
+  sceneAudioElements = [];
 
-      const blob =
-        await getSceneVoice(i);
 
-      if(blob){
+  for(
+    let i=0;
+    i<currentScenes.length;
+    i++
+  ){
 
-        sceneAudioBlobs[i] = blob;
+    const blob =
+    await getSceneVoice(i);
 
-        sceneAudioUrls[i] =
-          URL.createObjectURL(blob);
+    if(blob){
 
-        const audio =
-          new Audio(sceneAudioUrls[i]);
+      sceneAudioBlobs[i] =
+      blob;
 
-        sceneAudioElements[i] =
-          audio;
-
-      }
-
-    }catch(error){
-
-      console.error(
-        "Voice load error:",
-        error
+      sceneAudioUrls[i] =
+      URL.createObjectURL(
+        blob
       );
 
     }
@@ -890,130 +1075,189 @@ async function loadSavedSceneVoices(){
 }
 
 
-/* =========================================================
-   SCENE VOICE RECORDING
-========================================================= */
 
-async function startSceneRecording(index){
+/* =====================================================
+   START SCENE RECORDING
+===================================================== */
+
+async function startSceneRecording(
+index
+){
 
   try{
 
-    if(sceneRecorder &&
-       sceneRecorder.state !== "inactive"){
+    /* Stop old recording */
+
+    if(
+      sceneRecorder &&
+      sceneRecorder.state !== "inactive"
+    ){
 
       sceneRecorder.stop();
 
     }
 
-    sceneRecordingStream =
-      await navigator.mediaDevices.getUserMedia({
-        audio:true
-      });
 
-    sceneRecordingChunks = [];
+    recordingStream =
+    await navigator.mediaDevices
+    .getUserMedia({
+      audio:true
+    });
 
-    sceneRecordingIndex = index;
+
+    sceneChunks = [];
+
+    recordingSceneIndex =
+    index;
+
 
     sceneRecorder =
-      new MediaRecorder(
-        sceneRecordingStream
-      );
+    new MediaRecorder(
+      recordingStream
+    );
+
 
     sceneRecorder.ondataavailable =
-      function(event){
+    function(event){
 
-        if(event.data.size > 0){
+      if(event.data.size > 0){
 
-          sceneRecordingChunks.push(
-            event.data
-          );
+        sceneChunks.push(
+          event.data
+        );
 
-        }
+      }
 
-      };
+    };
+
 
     sceneRecorder.onstop =
-      async function(){
+    async function(){
 
-        const blob =
-          new Blob(
-            sceneRecordingChunks,
-            {
-              type:"audio/webm"
-            }
-          );
-
-        const recordedIndex =
-          sceneRecordingIndex;
-
-        sceneAudioBlobs[recordedIndex] =
-          blob;
-
-        if(sceneAudioUrls[recordedIndex]){
-
-          URL.revokeObjectURL(
-            sceneAudioUrls[recordedIndex]
-          );
-
+      const blob =
+      new Blob(
+        sceneChunks,
+        {
+          type:"audio/webm"
         }
+      );
 
-        sceneAudioUrls[recordedIndex] =
-          URL.createObjectURL(blob);
 
-        sceneAudioElements[recordedIndex] =
-          new Audio(
-            sceneAudioUrls[recordedIndex]
-          );
+      const savedIndex =
+      recordingSceneIndex;
 
-        try{
 
-          await saveSceneVoice(
-            recordedIndex,
-            blob
-          );
+      sceneAudioBlobs[
+        savedIndex
+      ] = blob;
 
-          updateSceneVoiceUI(
-            recordedIndex,
-            "saved"
-          );
 
-        }catch(error){
+      if(
+        sceneAudioUrls[
+          savedIndex
+        ]
+      ){
 
-          console.error(error);
+        URL.revokeObjectURL(
+          sceneAudioUrls[
+            savedIndex
+          ]
+        );
 
-          updateSceneVoiceUI(
-            recordedIndex,
-            "recorded"
-          );
+      }
 
-        }
 
-        if(sceneRecordingStream){
+      sceneAudioUrls[
+        savedIndex
+      ] =
+      URL.createObjectURL(
+        blob
+      );
 
-          sceneRecordingStream
-            .getTracks()
-            .forEach(track =>
-              track.stop()
-            );
 
-        }
+      try{
 
-      };
+        await saveSceneVoice(
+          savedIndex,
+          blob
+        );
+
+        updateSceneStatus(
+          savedIndex,
+          "✅ YOUR VOICE SAVED"
+        );
+
+      }
+
+      catch(error){
+
+        console.error(error);
+
+        updateSceneStatus(
+          savedIndex,
+          "⚠️ Recording saved temporarily."
+        );
+
+      }
+
+
+      if(recordingStream){
+
+        recordingStream
+        .getTracks()
+        .forEach(
+          track =>
+          track.stop()
+        );
+
+      }
+
+
+      renderStoryboard();
+
+    };
+
 
     sceneRecorder.start();
 
-    updateSceneVoiceUI(
+
+    updateSceneStatus(
       index,
-      "recording"
+      "🔴 RECORDING YOUR VOICE..."
     );
 
-  }catch(error){
+
+    const recordButton =
+    document.querySelector(
+      `[data-record="${index}"]`
+    );
+
+    const stopButton =
+    document.querySelector(
+      `[data-stop="${index}"]`
+    );
+
+
+    if(recordButton)
+    recordButton.classList.add(
+      "hidden"
+    );
+
+
+    if(stopButton)
+    stopButton.classList.remove(
+      "hidden"
+    );
+
+  }
+
+  catch(error){
 
     console.error(error);
 
-    updateSceneVoiceUI(
+    updateSceneStatus(
       index,
-      "permission"
+      "❌ Microphone permission required."
     );
 
   }
@@ -1021,10 +1265,17 @@ async function startSceneRecording(index){
 }
 
 
+
+/* =====================================================
+   STOP SCENE RECORDING
+===================================================== */
+
 function stopSceneRecording(){
 
-  if(sceneRecorder &&
-     sceneRecorder.state !== "inactive"){
+  if(
+    sceneRecorder &&
+    sceneRecorder.state !== "inactive"
+  ){
 
     sceneRecorder.stop();
 
@@ -1033,229 +1284,102 @@ function stopSceneRecording(){
 }
 
 
-function updateSceneVoiceUI(index,status){
 
-  const recordButton =
-    document.querySelector(
-      `[data-record-scene="${index}"]`
-    );
+/* =====================================================
+   STATUS
+===================================================== */
 
-  const stopButton =
-    document.querySelector(
-      `[data-stop-scene="${index}"]`
-    );
+function updateSceneStatus(
+index,
+message
+){
 
-  const playButton =
-    document.querySelector(
-      `[data-play-scene="${index}"]`
-    );
+  const element =
+  document.querySelector(
+    `[data-status="${index}"]`
+  );
 
-  const statusElement =
-    document.querySelector(
-      `[data-scene-status="${index}"]`
-    );
+  if(element){
 
-  if(!recordButton ||
-     !stopButton ||
-     !playButton ||
-     !statusElement){
-
-    return;
-
-  }
-
-  if(status === "recording"){
-
-    recordButton.classList.add(
-      "hidden"
-    );
-
-    stopButton.classList.remove(
-      "hidden"
-    );
-
-    playButton.classList.add(
-      "hidden"
-    );
-
-    statusElement.textContent =
-      "🔴 Recording your voice...";
-
-  }
-
-  else if(
-    status === "saved" ||
-    status === "recorded"
-  ){
-
-    recordButton.classList.remove(
-      "hidden"
-    );
-
-    stopButton.classList.add(
-      "hidden"
-    );
-
-    playButton.classList.remove(
-      "hidden"
-    );
-
-    statusElement.textContent =
-      "✅ Your voice is saved for this scene.";
-
-  }
-
-  else if(status === "permission"){
-
-    statusElement.textContent =
-      "Microphone permission is required.";
+    element.textContent =
+    message;
 
   }
 
 }
 
 
-/* =========================================================
-   PLAY SCENE VOICE
-========================================================= */
 
-function playSceneVoice(index){
+/* =====================================================
+   PLAY SAVED SCENE VOICE
+===================================================== */
 
-  return new Promise(resolve => {
+function playSavedVoice(index){
 
-    const blob =
-      sceneAudioBlobs[index];
+  const blob =
+  sceneAudioBlobs[index];
 
-    if(!blob){
+  if(!blob){
 
-      speakScene(index,resolve);
-
-      return;
-
-    }
-
-    stopAllAudio();
-
-    const url =
-      sceneAudioUrls[index] ||
-      URL.createObjectURL(blob);
-
-    sceneAudioUrls[index] = url;
-
-    const audio =
-      new Audio(url);
-
-    sceneAudioElements[index] =
-      audio;
-
-    audio.onended = function(){
-
-      resolve();
-
-    };
-
-    audio.onerror = function(){
-
-      resolve();
-
-    };
-
-    audio.play().catch(()=>{
-
-      resolve();
-
-    });
-
-  });
-
-}
-
-
-/* =========================================================
-   BROWSER SPEECH FALLBACK
-========================================================= */
-
-function speakScene(index,resolve){
-
-  const scene =
-    currentScenes[index];
-
-  if(!scene){
-
-    resolve();
-    return;
-
-  }
-
-  if(!("speechSynthesis" in window)){
-
-    setTimeout(resolve,4000);
-    return;
-
-  }
-
-  window.speechSynthesis.cancel();
-
-  const utterance =
-    new SpeechSynthesisUtterance(
-      scene.narration || ""
+    alert(
+      "इस Scene में अभी आपकी आवाज़ रिकॉर्ड नहीं है।"
     );
 
-  const language =
-    languageInput.value;
+    return;
 
-  utterance.lang =
-    language === "Hindi"
-      ? "hi-IN"
-      : "en-US";
+  }
 
-  utterance.rate = 0.95;
 
-  utterance.onend =
-    function(){
+  stopAllAudio();
 
-      resolve();
 
-    };
+  const url =
+  sceneAudioUrls[index] ||
+  URL.createObjectURL(blob);
 
-  utterance.onerror =
-    function(){
 
-      resolve();
+  sceneAudioUrls[index] =
+  url;
 
-    };
 
-  currentSpeech = utterance;
+  const audio =
+  new Audio(url);
 
-  window.speechSynthesis.speak(
-    utterance
+
+  sceneAudioElements[index] =
+  audio;
+
+
+  audio.play()
+  .catch(
+    error =>
+    console.error(error)
   );
 
 }
 
 
-/* =========================================================
-   STOP AUDIO
-========================================================= */
+
+/* =====================================================
+   STOP ALL AUDIO
+===================================================== */
 
 function stopAllAudio(){
 
-  if("speechSynthesis" in window){
-
-    window.speechSynthesis.cancel();
-
-  }
-
   sceneAudioElements.forEach(
-    audio => {
+    function(audio){
 
       if(audio){
 
         audio.pause();
 
         try{
+
           audio.currentTime = 0;
-        }catch(e){}
+
+        }
+
+        catch(error){}
 
       }
 
@@ -1265,509 +1389,575 @@ function stopAllAudio(){
 }
 
 
-/* =========================================================
+
+/* =====================================================
    GENERATE LESSON
-========================================================= */
+===================================================== */
 
 generateBtn.addEventListener(
-  "click",
-  async function(){
+"click",
+function(){
 
-    const topic =
-      topicInput.value.trim();
+  const topic =
+  topicInput.value.trim();
 
-    const language =
-      languageInput.value;
+  const language =
+  languageInput.value;
 
-    if(!topic){
 
-      alert(
-        "Please enter a topic."
-      );
+  if(!topic){
 
-      return;
-
-    }
-
-    generateBtn.disabled = true;
-
-    generationStatus.classList.remove(
-      "hidden"
+    alert(
+      "Please enter a topic."
     );
 
-    generationStatus.textContent =
-      "⏳ Generating educational lesson...";
-
-    try{
-
-      /*
-       * DEMO GENERATOR
-       *
-       * Later this can be connected
-       * to your existing Groq API.
-       */
-
-      const title =
-        topic;
-
-      const objectives =
-        language === "Hindi"
-        ? [
-            `${topic} को समझना`,
-            `${topic} के मुख्य भागों को जानना`,
-            `${topic} का वास्तविक जीवन में उपयोग समझना`
-          ]
-        : [
-            `Understand ${topic}`,
-            `Learn the main concepts of ${topic}`,
-            `Understand real-life applications of ${topic}`
-          ];
-
-
-      const intro =
-        language === "Hindi"
-        ? `${topic} एक महत्वपूर्ण शैक्षणिक विषय है। इस lesson में हम इसे आसान भाषा में समझेंगे।`
-        : `${topic} is an important educational topic. In this lesson, we will understand it in a simple way.`;
-
-
-      currentScenes = [
-
-        {
-          title:
-            "Introduction",
-
-          visual:
-            `Introduction visual for ${topic}`,
-
-          onScreen:
-            topic,
-
-          narration:
-            language === "Hindi"
-            ? `नमस्ते विद्यार्थियों। आज हम ${topic} के बारे में सीखेंगे। इस विषय को हम आसान भाषा में समझेंगे।`
-            : `Hello students. Today we are going to learn about ${topic}. We will understand this topic in a simple way.`
-        },
-
-        {
-          title:
-            "Basic Concept",
-
-          visual:
-            `Basic concept diagram of ${topic}`,
-
-          onScreen:
-            "Basic Concept",
-
-          narration:
-            language === "Hindi"
-            ? `${topic} को समझने के लिए सबसे पहले इसके मूल विचार को समझना जरूरी है। यह हमें विषय की पूरी जानकारी समझने में मदद करता है।`
-            : `To understand ${topic}, we first need to understand its basic concept. This helps us understand the complete topic.`
-        },
-
-        {
-          title:
-            "Main Points",
-
-          visual:
-            `Main points related to ${topic}`,
-
-          onScreen:
-            "Main Points",
-
-          narration:
-            language === "Hindi"
-            ? `${topic} के कई महत्वपूर्ण points हैं। इन points को क्रम से समझने पर यह विषय और भी आसान हो जाता है।`
-            : `${topic} has several important points. Understanding these points step by step makes the topic easier to learn.`
-        },
-
-        {
-          title:
-            "Example",
-
-          visual:
-            `Example of ${topic}`,
-
-          onScreen:
-            "Example",
-
-          narration:
-            language === "Hindi"
-            ? `अब ${topic} का एक सरल example देखते हैं। Example की मदद से theoretical concept को आसानी से समझा जा सकता है।`
-            : `Now let's look at a simple example of ${topic}. Examples make theoretical concepts easier to understand.`
-        },
-
-        {
-          title:
-            "Real Life Application",
-
-          visual:
-            `Real life application of ${topic}`,
-
-          onScreen:
-            "Real Life",
-
-          narration:
-            language === "Hindi"
-            ? `${topic} का उपयोग वास्तविक जीवन और आधुनिक technology में भी किया जा सकता है।`
-            : `${topic} can also be used in real life and modern technology.`
-        },
-
-        {
-          title:
-            "Summary",
-
-          visual:
-            `Summary of ${topic}`,
-
-          onScreen:
-            "Summary",
-
-          narration:
-            language === "Hindi"
-            ? `आज हमने ${topic} के basic concept, main points, example और applications को समझा।`
-            : `Today we understood the basic concept, main points, example and applications of ${topic}.`
-
-        },
-
-        {
-          title:
-            "Conclusion",
-
-          visual:
-            `Conclusion of ${topic}`,
-
-          onScreen:
-            "Thank You",
-
-          narration:
-            language === "Hindi"
-            ? `यह lesson पूरा हुआ। सीखते रहिए और नए concepts को समझते रहिए। धन्यवाद।`
-            : `This lesson is complete. Keep learning and exploring new concepts. Thank you.`
-        }
-
-      ];
-
-
-      lessonContent.innerHTML = `
-
-        <h3>${escapeHtml(title)}</h3>
-
-        <p>
-          ${escapeHtml(intro)}
-        </p>
-
-        <h4>Learning Objectives</h4>
-
-        <ul>
-          ${objectives
-            .map(item =>
-              `<li>${escapeHtml(item)}</li>`
-            )
-            .join("")
-          }
-        </ul>
-
-        <p class="small">
-          ${currentScenes.length}
-          scenes created.
-        </p>
-
-      `;
-
-      lessonSection.classList.remove(
-        "hidden"
-      );
-
-      generationStatus.textContent =
-        "✅ Lesson generated successfully.";
-
-    }catch(error){
-
-      console.error(error);
-
-      generationStatus.textContent =
-        "❌ Something went wrong.";
-
-    }
-
-    generateBtn.disabled = false;
+    return;
 
   }
-);
 
 
-/* =========================================================
+  generationStatus.classList.remove(
+    "hidden"
+  );
+
+
+  generationStatus.textContent =
+  "⏳ Generating lesson...";
+
+
+  const hindi =
+  language === "Hindi";
+
+
+  currentScenes = [
+
+    {
+      title:"Introduction",
+
+      visual:
+      "Introduction to " + topic,
+
+      onScreen:
+      topic,
+
+      narration:
+      hindi
+      ?
+      `नमस्ते विद्यार्थियों। आज हम ${topic} के बारे में सीखेंगे।`
+      :
+      `Hello students. Today we will learn about ${topic}.`
+    },
+
+
+    {
+      title:"Basic Concept",
+
+      visual:
+      "Basic concept of " + topic,
+
+      onScreen:
+      "Basic Concept",
+
+      narration:
+      hindi
+      ?
+      `${topic} को समझने के लिए सबसे पहले इसके मूल विचार को समझना जरूरी है।`
+      :
+      `To understand ${topic}, we first need to understand its basic concept.`
+    },
+
+
+    {
+      title:"Main Points",
+
+      visual:
+      "Main points of " + topic,
+
+      onScreen:
+      "Main Points",
+
+      narration:
+      hindi
+      ?
+      `${topic} के कई महत्वपूर्ण points हैं जिन्हें हमें क्रम से समझना चाहिए।`
+      :
+      `${topic} has several important points that we should understand step by step.`
+    },
+
+
+    {
+      title:"Example",
+
+      visual:
+      "Example of " + topic,
+
+      onScreen:
+      "Example",
+
+      narration:
+      hindi
+      ?
+      `अब ${topic} का एक आसान example समझते हैं।`
+      :
+      `Now let us understand a simple example of ${topic}.`
+    },
+
+
+    {
+      title:"Application",
+
+      visual:
+      "Real life application of " + topic,
+
+      onScreen:
+      "Real Life Application",
+
+      narration:
+      hindi
+      ?
+      `${topic} का उपयोग वास्तविक जीवन में भी किया जाता है।`
+      :
+      `${topic} is also used in real life.`
+    },
+
+
+    {
+      title:"Summary",
+
+      visual:
+      "Summary of " + topic,
+
+      onScreen:
+      "Summary",
+
+      narration:
+      hindi
+      ?
+      `आज हमने ${topic} के मुख्य concepts को समझा।`
+      :
+      `Today we understood the main concepts of ${topic}.`
+    },
+
+
+    {
+      title:"Conclusion",
+
+      visual:
+      "Conclusion of " + topic,
+
+      onScreen:
+      "Thank You",
+
+      narration:
+      hindi
+      ?
+      `हमारा lesson पूरा हुआ। सीखते रहिए। धन्यवाद।`
+      :
+      `Our lesson is complete. Keep learning. Thank you.`
+    }
+
+  ];
+
+
+  lessonContent.innerHTML = `
+
+    <h3>${escapeHTML(topic)}</h3>
+
+    <p>
+      ${
+        hindi
+        ?
+        "यह lesson आसान भाषा में तैयार किया गया है।"
+        :
+        "This lesson has been prepared in simple language."
+      }
+    </p>
+
+    <h4>Scenes: ${currentScenes.length}</h4>
+
+  `;
+
+
+  lessonSection.classList.remove(
+    "hidden"
+  );
+
+
+  generationStatus.textContent =
+  "✅ Lesson generated.";
+
+});
+
+
+
+/* =====================================================
    CREATE VIDEO
-========================================================= */
+===================================================== */
 
 createVideoBtn.addEventListener(
-  "click",
-  async function(){
+"click",
+async function(){
 
-    renderStoryboard();
+  await loadSavedVoices();
 
-    videoSection.classList.remove(
-      "hidden"
-    );
+  renderStoryboard();
 
-    currentScene = 0;
+  storyboardSection.classList.remove(
+    "hidden"
+  );
 
-    timeline.max =
-      Math.max(
-        0,
-        currentScenes.length - 1
-      );
-
-    timeline.value = 0;
-
-    updateVideoScene();
-
-    await loadSavedSceneVoices();
-
-    renderStoryboard();
-
-    updateVideoScene();
-
-    videoSection.scrollIntoView({
-      behavior:"smooth"
-    });
-
-  }
-);
+  videoSection.classList.remove(
+    "hidden"
+  );
 
 
-/* =========================================================
+  currentScene = 0;
+
+  timeline.max =
+  currentScenes.length - 1;
+
+  timeline.value = 0;
+
+
+  updateVideoScene();
+
+
+  videoSection.scrollIntoView({
+    behavior:"smooth"
+  });
+
+});
+
+
+
+/* =====================================================
    STORYBOARD
-========================================================= */
+===================================================== */
 
 function renderStoryboard(){
 
   scenesContainer.innerHTML = "";
 
+
   currentScenes.forEach(
-    (scene,index)=>{
+  function(scene,index){
 
-      const sceneElement =
-        document.createElement("div");
+    const hasVoice =
+    !!sceneAudioBlobs[index];
 
-      sceneElement.className =
-        "scene";
 
-      const hasVoice =
-        !!sceneAudioBlobs[index];
+    const div =
+    document.createElement("div");
 
-      sceneElement.innerHTML = `
+    div.className =
+    "scene";
 
-        <h3>
-          <span class="scene-number">
-            Scene ${index + 1}
-          </span>
-          — ${escapeHtml(scene.title)}
-        </h3>
 
-        <p>
-          <strong>🎨 Visual:</strong>
-          ${escapeHtml(scene.visual || "")}
-        </p>
+    div.innerHTML = `
 
-        <p>
-          <strong>📝 On Screen:</strong>
-          ${escapeHtml(scene.onScreen || "")}
-        </p>
+      <h3>
+        Scene ${index+1}:
+        ${escapeHTML(scene.title)}
+      </h3>
 
-        <p>
-          <strong>🎙️ AI Narration Text:</strong>
-          ${escapeHtml(scene.narration || "")}
-        </p>
 
-        <div class="scene-voice">
+      <p>
+        <b>🎨 Visual:</b>
+        ${escapeHTML(scene.visual)}
+      </p>
 
-          <strong>🎙️ My Voice</strong>
 
-          <div
-            class="scene-record-status"
-            data-scene-status="${index}"
-          >
-            ${
-              hasVoice
-              ? "✅ Your voice is saved for this scene."
-              : "No recording yet."
-            }
-          </div>
+      <p>
+        <b>📝 On Screen:</b>
+        ${escapeHTML(scene.onScreen)}
+      </p>
 
-          <button
-            class="primary ${
-              hasVoice ? "" : ""
-            }"
-            data-record-scene="${index}"
-            onclick="startSceneRecording(${index})"
-          >
-            🎙️ Record My Voice
-          </button>
 
-          <button
-            class="danger hidden"
-            data-stop-scene="${index}"
-            onclick="stopSceneRecording()"
-          >
-            ⏹ Stop Recording
-          </button>
+      <p>
+        <b>📖 Narration:</b>
+        ${escapeHTML(scene.narration)}
+      </p>
 
-          <button
-            class="secondary ${
-              hasVoice ? "" : "hidden"
-            }"
-            data-play-scene="${index}"
-            onclick="playSavedScene(${index})"
-          >
-            ▶ Play My Recorded Voice
-          </button>
 
+      <div class="sceneVoice">
+
+        <b>🎙️ YOUR VOICE</b>
+
+        <div
+          class="sceneStatus"
+          data-status="${index}"
+        >
+          ${
+            hasVoice
+            ?
+            "✅ YOUR VOICE IS SAVED"
+            :
+            "⚠️ No recording yet"
+          }
         </div>
 
-      `;
 
-      scenesContainer.appendChild(
-        sceneElement
-      );
+        <button
+          class="primary ${
+            hasVoice ? "" : ""
+          }"
+          data-record="${index}"
+          onclick="startSceneRecording(${index})"
+        >
+          🎙️ Record My Voice
+        </button>
 
-    }
-  );
+
+        <button
+          class="danger hidden"
+          data-stop="${index}"
+          onclick="stopSceneRecording()"
+        >
+          ⏹ Stop Recording
+        </button>
+
+
+        <button
+          class="secondary ${
+            hasVoice
+            ? ""
+            :
+            "hidden"
+          }"
+          onclick="playSavedVoice(${index})"
+        >
+          ▶ Play My Recorded Voice
+        </button>
+
+
+      </div>
+
+    `;
+
+
+    scenesContainer.appendChild(
+      div
+    );
+
+  });
 
 }
 
 
-function playSavedScene(index){
 
-  const blob =
-    sceneAudioBlobs[index];
-
-  if(!blob) return;
-
-  stopAllAudio();
-
-  const url =
-    sceneAudioUrls[index] ||
-    URL.createObjectURL(blob);
-
-  sceneAudioUrls[index] = url;
-
-  const audio =
-    new Audio(url);
-
-  sceneAudioElements[index] =
-    audio;
-
-  audio.play();
-
-}
-
-
-/* =========================================================
-   VIDEO SCENE UPDATE
-========================================================= */
+/* =====================================================
+   VIDEO UPDATE
+===================================================== */
 
 function updateVideoScene(){
 
   if(!currentScenes.length)
-    return;
+  return;
+
 
   const scene =
-    currentScenes[currentScene];
+  currentScenes[currentScene];
 
-  videoSceneTitle.textContent =
-    `Scene ${currentScene + 1}: ${scene.title}`;
 
-  videoSceneText.textContent =
-    scene.onScreen || "";
+  videoTitle.textContent =
+  `Scene ${currentScene+1}: ${scene.title}`;
+
+
+  videoText.textContent =
+  scene.onScreen;
+
 
   videoNarration.textContent =
-    scene.narration || "";
+  scene.narration;
+
 
   timeline.value =
-    currentScene;
+  currentScene;
+
 
   const hasVoice =
-    !!sceneAudioBlobs[currentScene];
+  !!sceneAudioBlobs[currentScene];
 
-  videoStatus.textContent =
-    hasVoice
-      ? "🎙️ Your recorded voice is available for this scene."
-      : "🔊 No recording for this scene. Browser speech will be used.";
+
+  if(hasVoice){
+
+    videoStatus.textContent =
+    "🎙️ YOUR VOICE IS READY FOR THIS SCENE.";
+
+  }
+
+  else{
+
+    videoStatus.textContent =
+    "🔇 NO VOICE RECORDED — VIDEO WILL BE SILENT.";
+
+  }
 
 }
 
 
-/* =========================================================
+
+/* =====================================================
    PLAY VIDEO
-========================================================= */
+===================================================== */
 
 async function playVideo(){
 
   if(!currentScenes.length)
-    return;
+  return;
+
 
   playing = true;
 
   playBtn.textContent =
-    "⏸ Playing...";
+  "⏸ Playing...";
+
 
   while(
     playing &&
-    currentScene < currentScenes.length
+    currentScene <
+    currentScenes.length
   ){
 
     updateVideoScene();
 
-    await playSceneVoice(
-      currentScene
-    );
+
+    const blob =
+    sceneAudioBlobs[currentScene];
+
+
+    /*
+      IMPORTANT:
+
+      NO BROWSER SPEECH.
+      NO AI VOICE.
+
+      Only user's recording.
+    */
+
+
+    if(!blob){
+
+      playing = false;
+
+      playBtn.textContent =
+      "▶ Play";
+
+
+      videoStatus.textContent =
+      "🔇 इस Scene में आपकी voice recording नहीं है। पहले Record My Voice दबाएँ।";
+
+      return;
+
+    }
+
+
+    const url =
+    sceneAudioUrls[currentScene] ||
+    URL.createObjectURL(blob);
+
+
+    sceneAudioUrls[currentScene] =
+    url;
+
+
+    const audio =
+    new Audio(url);
+
+
+    sceneAudioElements[currentScene] =
+    audio;
+
+
+    await new Promise(
+    function(resolve){
+
+      audio.onended =
+      function(){
+
+        resolve();
+
+      };
+
+
+      audio.onerror =
+      function(){
+
+        resolve();
+
+      };
+
+
+      audio.play()
+      .catch(
+        function(){
+
+          resolve();
+
+        }
+      );
+
+    });
+
 
     if(!playing)
-      break;
+    break;
+
 
     currentScene++;
 
   }
 
-  if(currentScene >= currentScenes.length){
+
+  playing = false;
+
+  playBtn.textContent =
+  "▶ Play";
+
+
+  if(
+    currentScene >=
+    currentScenes.length
+  ){
 
     currentScene =
-      currentScenes.length - 1;
+    currentScenes.length - 1;
 
     updateVideoScene();
 
   }
 
-  playing = false;
-
-  playBtn.textContent =
-    "▶ Play";
-
 }
 
 
+
+/* =====================================================
+   PLAY BUTTON
+===================================================== */
+
 playBtn.addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    if(playing){
+  if(playing){
 
-      pauseVideo();
-
-    }else{
-
-      playVideo();
-
-    }
+    pauseVideo();
 
   }
-);
+
+  else{
+
+    playVideo();
+
+  }
+
+});
 
 
-/* =========================================================
+
+/* =====================================================
    PAUSE
-========================================================= */
+===================================================== */
 
 function pauseVideo(){
 
@@ -1776,157 +1966,169 @@ function pauseVideo(){
   stopAllAudio();
 
   playBtn.textContent =
-    "▶ Play";
+  "▶ Play";
 
 }
 
 
 pauseBtn.addEventListener(
-  "click",
-  pauseVideo
+"click",
+pauseVideo
 );
 
 
-/* =========================================================
+
+/* =====================================================
    NEXT
-========================================================= */
+===================================================== */
 
 nextBtn.addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    pauseVideo();
+  pauseVideo();
 
-    if(
-      currentScene <
-      currentScenes.length - 1
-    ){
 
-      currentScene++;
+  if(
+    currentScene <
+    currentScenes.length-1
+  ){
 
-      updateVideoScene();
+    currentScene++;
 
-    }
+    updateVideoScene();
 
   }
-);
+
+});
 
 
-/* =========================================================
+
+/* =====================================================
    PREVIOUS
-========================================================= */
+===================================================== */
 
-prevBtn.addEventListener(
-  "click",
-  function(){
+previousBtn.addEventListener(
+"click",
+function(){
 
-    pauseVideo();
+  pauseVideo();
 
-    if(currentScene > 0){
 
-      currentScene--;
+  if(currentScene > 0){
 
-      updateVideoScene();
+    currentScene--;
 
-    }
+    updateVideoScene();
 
   }
-);
+
+});
 
 
-/* =========================================================
+
+/* =====================================================
    RESTART
-========================================================= */
+===================================================== */
 
 restartBtn.addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    pauseVideo();
+  pauseVideo();
 
-    currentScene = 0;
+  currentScene = 0;
 
-    updateVideoScene();
+  updateVideoScene();
 
-  }
-);
+});
 
 
-/* =========================================================
+
+/* =====================================================
    TIMELINE
-========================================================= */
+===================================================== */
 
 timeline.addEventListener(
-  "input",
-  function(){
+"input",
+function(){
 
-    pauseVideo();
+  pauseVideo();
 
-    currentScene =
-      Number(this.value);
+  currentScene =
+  Number(this.value);
 
-    updateVideoScene();
+  updateVideoScene();
 
-  }
-);
+});
 
 
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
 
-function escapeHtml(value){
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value){
 
   return String(value || "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
 
 }
 
 
-/* =========================================================
-   INITIAL DATABASE START
-========================================================= */
 
-openVoiceDatabase()
-  .then(()=>{
-    console.log(
-      "TeachGenAI voice database ready."
-    );
-  })
-  .catch(error=>{
-    console.error(
-      "Database error:",
-      error
-    );
-  });
+/* =====================================================
+   START DATABASE
+===================================================== */
+
+openDatabase()
+.then(
+function(){
+
+  console.log(
+    "TeachGenAI voice database ready."
+  );
+
+})
+.catch(
+function(error){
+
+  console.error(
+    "Database error:",
+    error
+  );
+
+});
 
 
-/* =========================================================
+
+/* =====================================================
    CLEANUP
-========================================================= */
+===================================================== */
 
 window.addEventListener(
-  "beforeunload",
-  function(){
+"beforeunload",
+function(){
 
-    stopAllAudio();
+  stopAllAudio();
 
-    if(sceneRecordingStream){
 
-      sceneRecordingStream
-        .getTracks()
-        .forEach(track =>
-          track.stop()
-        );
+  if(recordingStream){
 
-    }
+    recordingStream
+    .getTracks()
+    .forEach(
+      track =>
+      track.stop()
+    );
 
   }
-);
+
+});
 
 </script>
 
