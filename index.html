@@ -100,6 +100,18 @@
       background: #d97706;
     }
 
+    button.record-scene {
+      background: #dc2626;
+    }
+
+    button.play-scene {
+      background: #0891b2;
+    }
+
+    button.stop-scene {
+      background: #7f1d1d;
+    }
+
     .hidden {
       display: none !important;
     }
@@ -134,6 +146,19 @@
     .scene h3 {
       margin-top: 0;
       color: #2563eb;
+    }
+
+    .scene-voice-box {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      background: white;
+      border: 1px solid #dbe3ef;
+    }
+
+    .scene-voice-title {
+      font-weight: bold;
+      margin-bottom: 8px;
     }
 
     .video-box {
@@ -217,6 +242,13 @@
       line-height: 1.5;
     }
 
+    .recording-status {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #b91c1c;
+      font-weight: bold;
+    }
+
     @media (max-width: 600px) {
       header h1 {
         font-size: 24px;
@@ -246,9 +278,9 @@
 
 <div class="container">
 
-  <!-- ============================= -->
+  <!-- ================================= -->
   <!-- TEACHER PROFILE -->
-  <!-- ============================= -->
+  <!-- ================================= -->
 
   <div class="card">
 
@@ -274,7 +306,6 @@
 
     </div>
 
-
     <label for="voiceInput">
       Upload Your Voice Sample
     </label>
@@ -291,14 +322,12 @@
       controls>
     </audio>
 
-
     <button
       id="playSampleButton"
       class="warning-btn hidden"
       type="button">
       🔊 Play My Voice Sample
     </button>
-
 
     <button
       id="recordButton"
@@ -307,13 +336,11 @@
       🎤 Record My Voice
     </button>
 
-
     <audio
       id="recordedVoice"
       class="hidden"
       controls>
     </audio>
-
 
     <button
       id="useRecordedButton"
@@ -322,32 +349,31 @@
       ✅ Use Recorded Voice
     </button>
 
-
     <div
       class="status"
       id="mediaStatus">
       Photo और voice sample अभी upload नहीं किए गए हैं।
     </div>
 
-
     <div class="warning">
 
-      ⚠️ आपकी photo और voice इस browser में preview के लिए
-      इस्तेमाल हो रही है।
+      ⚠️ आपकी photo और voice इस browser में
+      preview/recording के लिए इस्तेमाल हो रही है।
 
       <br><br>
 
-      Uploaded voice sample को नई AI narration में बदलने के लिए
-      authorized Voice-TTS service/API की जरूरत होगी।
+      अब हर lesson scene के लिए आप अपनी आवाज़
+      सीधे record कर सकते हैं। वही recording
+      video preview में narration के रूप में चलेगी।
 
     </div>
 
   </div>
 
 
-  <!-- ============================= -->
+  <!-- ================================= -->
   <!-- LESSON GENERATOR -->
-  <!-- ============================= -->
+  <!-- ================================= -->
 
   <div class="card">
 
@@ -362,7 +388,6 @@
       type="text"
       placeholder="Example: Photosynthesis"
     >
-
 
     <label for="language">
       Language
@@ -380,7 +405,6 @@
 
     </select>
 
-
     <button
       id="generateButton"
       type="button">
@@ -392,9 +416,9 @@
   </div>
 
 
-  <!-- ============================= -->
+  <!-- ================================= -->
   <!-- LESSON -->
-  <!-- ============================= -->
+  <!-- ================================= -->
 
   <div
     id="lessonSection"
@@ -402,15 +426,10 @@
 
     <h2 id="lessonTitle"></h2>
 
-
     <p>
-
       <strong>Audience:</strong>
-
       <span id="audience"></span>
-
     </p>
-
 
     <h3>
       🎯 Learning Objectives
@@ -418,20 +437,17 @@
 
     <div id="objectives"></div>
 
-
     <h3>
       📖 Introduction
     </h3>
 
     <p id="introduction"></p>
 
-
     <h3>
-      🎬 Storyboard
+      🎬 Storyboard & Voice Recording
     </h3>
 
     <div id="scenes"></div>
-
 
     <button
       id="videoButton"
@@ -445,9 +461,9 @@
   </div>
 
 
-  <!-- ============================= -->
+  <!-- ================================= -->
   <!-- VIDEO -->
-  <!-- ============================= -->
+  <!-- ================================= -->
 
   <div
     id="videoSection"
@@ -457,9 +473,7 @@
       🎥 Educational Video Preview
     </h2>
 
-
     <div class="video-box">
-
 
       <img
         id="videoTeacher"
@@ -467,84 +481,60 @@
         alt="AI Teacher"
       >
 
-
       <h2
         id="videoSceneTitle"
         style="color:white;">
       </h2>
-
 
       <div
         id="videoText"
         class="video-text">
       </div>
 
-
       <div
         id="videoNarration"
         class="video-narration">
       </div>
 
-
       <div class="controls">
-
 
         <button
           id="previousButton"
           type="button">
-
           ◀ Previous
-
         </button>
-
 
         <button
           id="playButton"
           type="button">
-
           ▶ Play
-
         </button>
-
 
         <button
           id="pauseButton"
           type="button">
-
           ⏸ Pause
-
         </button>
-
 
         <button
           id="nextButton"
           type="button">
-
           Next ▶
-
         </button>
-
 
         <button
           id="restartButton"
           type="button">
-
           🔄 Restart
-
         </button>
-
 
         <button
           id="voiceButton"
           type="button">
-
           🔊 Voice
-
         </button>
 
-
       </div>
-
 
       <div
         id="videoStatus"
@@ -573,8 +563,6 @@
 
   let playing = false;
 
-  let playTimer = null;
-
   let teacherPhoto = null;
 
   let voiceSample = null;
@@ -586,6 +574,24 @@
   let audioChunks = [];
 
   let activeVoiceObjectUrl = null;
+
+  // ==========================================
+  // SCENE VOICE VARIABLES
+  // ==========================================
+
+  let sceneAudioBlobs = [];
+
+  let sceneAudioUrls = [];
+
+  let sceneAudioElements = [];
+
+  let sceneRecorder = null;
+
+  let sceneRecordingChunks = [];
+
+  let sceneRecordingIndex = null;
+
+  let sceneRecordingStream = null;
 
 
   // ==========================================
@@ -643,14 +649,12 @@
 
       audio.classList.remove("hidden");
 
-
       const playButton =
         document.getElementById(
           "playSampleButton"
         );
 
       playButton.classList.remove("hidden");
-
 
       updateMediaStatus();
 
@@ -686,7 +690,7 @@
 
 
   // ==========================================
-  // RECORD VOICE
+  // GENERAL RECORD VOICE
   // ==========================================
 
   document
@@ -697,7 +701,6 @@
         document.getElementById(
           "recordButton"
         );
-
 
       if (!mediaRecorder) {
 
@@ -710,13 +713,10 @@
                 audio: true
               });
 
-
           audioChunks = [];
-
 
           mediaRecorder =
             new MediaRecorder(stream);
-
 
           mediaRecorder.ondataavailable =
             function(event) {
@@ -734,7 +734,6 @@
 
             };
 
-
           mediaRecorder.onstop =
             function() {
 
@@ -743,29 +742,26 @@
                   audioChunks,
                   {
                     type:
+                      mediaRecorder.mimeType ||
                       "audio/webm"
                   }
                 );
-
 
               const url =
                 URL.createObjectURL(
                   recordedVoiceBlob
                 );
 
-
               const audio =
                 document.getElementById(
                   "recordedVoice"
                 );
-
 
               audio.src = url;
 
               audio.classList.remove(
                 "hidden"
               );
-
 
               document
                 .getElementById(
@@ -775,7 +771,6 @@
                   "hidden"
                 );
 
-
               stream
                 .getTracks()
                 .forEach(
@@ -783,27 +778,23 @@
                     track.stop()
                 );
 
-
               button.textContent =
                 "🎤 Record My Voice";
 
-
               mediaRecorder = null;
-
 
               updateMediaStatus();
 
             };
 
-
           mediaRecorder.start();
-
 
           button.textContent =
             "⏹ Stop Recording";
 
-
         } catch (error) {
+
+          console.error(error);
 
           alert(
             "Microphone permission नहीं मिली। Browser में microphone permission allow करें।"
@@ -842,20 +833,18 @@
 
         }
 
-
         voiceSample =
           new File(
             [recordedVoiceBlob],
             "my-recorded-voice.webm",
             {
               type:
+                recordedVoiceBlob.type ||
                 "audio/webm"
             }
           );
 
-
         updateMediaStatus();
-
 
         alert(
           "✅ आपकी recorded voice sample ready है।"
@@ -876,19 +865,16 @@
         "mediaStatus"
       );
 
-
     const photoText =
       teacherPhoto
         ? "✅ Photo ready"
         : "❌ Photo not selected";
-
 
     const voiceText =
       voiceSample ||
       recordedVoiceBlob
         ? "✅ Voice sample ready"
         : "❌ Voice sample not selected";
-
 
     status.textContent =
       photoText +
@@ -920,12 +906,10 @@
         .value
         .trim();
 
-
     const language =
       document
         .getElementById("language")
         .value;
-
 
     if (!topic) {
 
@@ -936,7 +920,6 @@
       return;
 
     }
-
 
     let title;
 
@@ -957,11 +940,9 @@
         topic +
         " - शैक्षणिक पाठ";
 
-
       introduction =
         topic +
         " एक महत्वपूर्ण विषय है। इस पाठ में हम इसके मुख्य concepts को आसान भाषा में समझेंगे।";
-
 
       objectives = [
 
@@ -976,11 +957,9 @@
 
       ];
 
-
       scenes = [
 
         {
-
           title:
             "परिचय",
 
@@ -993,12 +972,9 @@
             "नमस्ते विद्यार्थियों। आज हम " +
             topic +
             " के बारे में सीखेंगे।"
-
         },
 
-
         {
-
           title:
             "मुख्य अवधारणा",
 
@@ -1009,12 +985,9 @@
           narration:
             topic +
             " को समझने के लिए पहले इसकी मूल अवधारणा को समझना जरूरी है।"
-
         },
 
-
         {
-
           title:
             "कैसे काम करता है?",
 
@@ -1026,12 +999,9 @@
             "अब हम एक सरल उदाहरण की मदद से समझते हैं कि " +
             topic +
             " कैसे काम करता है।"
-
         },
 
-
         {
-
           title:
             "उदाहरण",
 
@@ -1042,12 +1012,9 @@
 
           narration:
             "अब एक वास्तविक जीवन के उदाहरण को देखते हैं ताकि concept और आसान हो जाए।"
-
         },
 
-
         {
-
           title:
             "निष्कर्ष",
 
@@ -1060,13 +1027,12 @@
             "आज हमने " +
             topic +
             " के मुख्य points सीखे। उम्मीद है अब यह topic आपको आसानी से समझ में आ गया होगा।"
-
         }
 
       ];
 
-
     }
+
 
     // ========================================
     // ENGLISH
@@ -1078,11 +1044,9 @@
         topic +
         " - Educational Lesson";
 
-
       introduction =
         topic +
         " is an important educational topic. In this lesson, we will understand its key concepts using simple explanations and examples.";
-
 
       objectives = [
 
@@ -1097,11 +1061,9 @@
 
       ];
 
-
       scenes = [
 
         {
-
           title:
             "Introduction",
 
@@ -1114,12 +1076,9 @@
             "Hello students. Today we will learn about " +
             topic +
             "."
-
         },
 
-
         {
-
           title:
             "Main Concept",
 
@@ -1132,12 +1091,9 @@
             "First, let's understand the basic concept behind " +
             topic +
             "."
-
         },
 
-
         {
-
           title:
             "How It Works",
 
@@ -1148,12 +1104,9 @@
             "Now let's understand how " +
             topic +
             " works with a simple example."
-
         },
 
-
         {
-
           title:
             "Example",
 
@@ -1162,12 +1115,9 @@
 
           narration:
             "A real-life example can help us understand this concept more clearly."
-
         },
 
-
         {
-
           title:
             "Conclusion",
 
@@ -1178,7 +1128,6 @@
             "Today we learned the important points about " +
             topic +
             ". I hope the concept is now easier to understand."
-
         }
 
       ];
@@ -1195,6 +1144,9 @@
 
     currentScene = 0;
 
+    // पुरानी scene recordings साफ करें
+    clearSceneVoiceRecordings();
+
 
     // ========================================
     // DISPLAY LESSON
@@ -1207,14 +1159,12 @@
       .textContent =
         title;
 
-
     document
       .getElementById(
         "audience"
       )
       .textContent =
         "Students";
-
 
     document
       .getElementById(
@@ -1229,10 +1179,8 @@
         "objectives"
       );
 
-
     objectivesBox.innerHTML =
       "";
-
 
     objectives.forEach(
       function(item) {
@@ -1242,15 +1190,12 @@
             "p"
           );
 
-
         p.className =
           "objective";
-
 
         p.textContent =
           "• " +
           item;
-
 
         objectivesBox.appendChild(
           p
@@ -1269,10 +1214,8 @@
         "scenes"
       );
 
-
     scenesBox.innerHTML =
       "";
-
 
     scenes.forEach(
       function(scene, index) {
@@ -1282,7 +1225,6 @@
             "div"
           );
 
-
         div.className =
           "scene";
 
@@ -1291,7 +1233,6 @@
           document.createElement(
             "h3"
           );
-
 
         heading.textContent =
           "Scene " +
@@ -1305,7 +1246,6 @@
             "p"
           );
 
-
         visual.innerHTML =
           "<strong>Visual:</strong> " +
           escapeHtml(
@@ -1318,12 +1258,146 @@
             "p"
           );
 
-
         narration.innerHTML =
           "<strong>Narration:</strong> " +
           escapeHtml(
             scene.narration
           );
+
+
+        // ====================================
+        // SCENE VOICE BOX
+        // ====================================
+
+        const voiceBox =
+          document.createElement(
+            "div"
+          );
+
+        voiceBox.className =
+          "scene-voice-box";
+
+
+        const voiceTitle =
+          document.createElement(
+            "div"
+          );
+
+        voiceTitle.className =
+          "scene-voice-title";
+
+        voiceTitle.textContent =
+          "🎙️ अपनी आवाज़ में इस Scene की narration record करें";
+
+
+        const recordSceneButton =
+          document.createElement(
+            "button"
+          );
+
+        recordSceneButton.type =
+          "button";
+
+        recordSceneButton.className =
+          "record-scene";
+
+        recordSceneButton.textContent =
+          "🎙️ Record My Voice";
+
+
+        const playSceneButton =
+          document.createElement(
+            "button"
+          );
+
+        playSceneButton.type =
+          "button";
+
+        playSceneButton.className =
+          "play-scene hidden";
+
+        playSceneButton.textContent =
+          "▶ Play My Recorded Voice";
+
+
+        const audio =
+          document.createElement(
+            "audio"
+          );
+
+        audio.controls =
+          true;
+
+        audio.classList.add(
+          "hidden"
+        );
+
+
+        const recordingStatus =
+          document.createElement(
+            "div"
+          );
+
+        recordingStatus.className =
+          "recording-status";
+
+
+        recordSceneButton.addEventListener(
+          "click",
+          function() {
+
+            toggleSceneRecording(
+              index,
+              recordSceneButton,
+              playSceneButton,
+              audio,
+              recordingStatus
+            );
+
+          }
+        );
+
+
+        playSceneButton.addEventListener(
+          "click",
+          function() {
+
+            if (
+              sceneAudioUrls[index]
+            ) {
+
+              stopAllSceneAudio();
+
+              audio.currentTime =
+                0;
+
+              audio.play();
+
+            }
+
+          }
+        );
+
+
+        voiceBox.appendChild(
+          voiceTitle
+        );
+
+        voiceBox.appendChild(
+          recordSceneButton
+        );
+
+        voiceBox.appendChild(
+          playSceneButton
+        );
+
+        voiceBox.appendChild(
+          audio
+        );
+
+        voiceBox.appendChild(
+          recordingStatus
+        );
 
 
         div.appendChild(
@@ -1336,6 +1410,10 @@
 
         div.appendChild(
           narration
+        );
+
+        div.appendChild(
+          voiceBox
         );
 
 
@@ -1373,6 +1451,305 @@
         behavior:
           "smooth"
       });
+
+  }
+
+
+  // ==========================================
+  // SCENE VOICE RECORDING
+  // ==========================================
+
+  async function toggleSceneRecording(
+    index,
+    recordButton,
+    playButton,
+    audioElement,
+    statusElement
+  ) {
+
+    // अगर अभी इसी scene की recording चल रही है
+    if (
+      sceneRecorder &&
+      sceneRecordingIndex === index
+    ) {
+
+      sceneRecorder.stop();
+
+      return;
+
+    }
+
+
+    // अगर किसी दूसरे scene की recording चल रही है
+    if (sceneRecorder) {
+
+      sceneRecorder.stop();
+
+      return;
+
+    }
+
+
+    try {
+
+      const stream =
+        await navigator
+          .mediaDevices
+          .getUserMedia({
+            audio: true
+          });
+
+
+      sceneRecordingStream =
+        stream;
+
+      sceneRecordingChunks = [];
+
+      sceneRecordingIndex =
+        index;
+
+
+      let mimeType =
+        "";
+
+      if (
+        MediaRecorder.isTypeSupported(
+          "audio/webm;codecs=opus"
+        )
+      ) {
+
+        mimeType =
+          "audio/webm;codecs=opus";
+
+      } else if (
+        MediaRecorder.isTypeSupported(
+          "audio/webm"
+        )
+      ) {
+
+        mimeType =
+          "audio/webm";
+
+      }
+
+
+      sceneRecorder =
+        mimeType
+          ? new MediaRecorder(
+              stream,
+              {
+                mimeType:
+                  mimeType
+              }
+            )
+          : new MediaRecorder(
+              stream
+            );
+
+
+      sceneRecorder.ondataavailable =
+        function(event) {
+
+          if (
+            event.data &&
+            event.data.size > 0
+          ) {
+
+            sceneRecordingChunks.push(
+              event.data
+            );
+
+          }
+
+        };
+
+
+      sceneRecorder.onstart =
+        function() {
+
+          recordButton.textContent =
+            "⏹ Stop Recording";
+
+          recordButton.classList.remove(
+            "record-scene"
+          );
+
+          recordButton.classList.add(
+            "stop-scene"
+          );
+
+          statusElement.textContent =
+            "🔴 Recording चल रही है...";
+
+        };
+
+
+      sceneRecorder.onstop =
+        function() {
+
+          const finalType =
+            sceneRecorder.mimeType ||
+            "audio/webm";
+
+
+          const blob =
+            new Blob(
+              sceneRecordingChunks,
+              {
+                type:
+                  finalType
+              }
+            );
+
+
+          sceneAudioBlobs[index] =
+            blob;
+
+
+          // पुराना URL हटाएं
+          if (
+            sceneAudioUrls[index]
+          ) {
+
+            URL.revokeObjectURL(
+              sceneAudioUrls[index]
+            );
+
+          }
+
+
+          const url =
+            URL.createObjectURL(
+              blob
+            );
+
+
+          sceneAudioUrls[index] =
+            url;
+
+
+          audioElement.src =
+            url;
+
+          audioElement.classList.remove(
+            "hidden"
+          );
+
+
+          playButton.classList.remove(
+            "hidden"
+          );
+
+
+          recordButton.textContent =
+            "🎙️ Record Again";
+
+
+          recordButton.classList.remove(
+            "stop-scene"
+          );
+
+          recordButton.classList.add(
+            "record-scene"
+          );
+
+
+          statusElement.textContent =
+            "✅ आपकी आवाज़ इस Scene के लिए save हो गई।";
+
+
+          if (
+            sceneRecordingStream
+          ) {
+
+            sceneRecordingStream
+              .getTracks()
+              .forEach(
+                track =>
+                  track.stop()
+              );
+
+          }
+
+
+          sceneRecorder =
+            null;
+
+          sceneRecordingIndex =
+            null;
+
+          sceneRecordingStream =
+            null;
+
+        };
+
+
+      sceneRecorder.start();
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "Microphone permission नहीं मिली। कृपया microphone permission Allow करें।"
+      );
+
+    }
+
+  }
+
+
+  // ==========================================
+  // CLEAR SCENE RECORDINGS
+  // ==========================================
+
+  function clearSceneVoiceRecordings() {
+
+    stopAllSceneAudio();
+
+    sceneAudioUrls.forEach(
+      function(url) {
+
+        if (url) {
+
+          URL.revokeObjectURL(
+            url
+          );
+
+        }
+
+      }
+    );
+
+    sceneAudioBlobs = [];
+
+    sceneAudioUrls = [];
+
+    sceneAudioElements = [];
+
+  }
+
+
+  // ==========================================
+  // STOP ALL SCENE AUDIO
+  // ==========================================
+
+  function stopAllSceneAudio() {
+
+    sceneAudioElements.forEach(
+      function(audio) {
+
+        try {
+
+          audio.pause();
+
+          audio.currentTime =
+            0;
+
+        } catch (error) {}
+
+      }
+    );
 
   }
 
@@ -1449,9 +1826,8 @@
 
         setupTeacherPhoto();
 
-
-        currentScene = 0;
-
+        currentScene =
+          0;
 
         showScene();
 
@@ -1482,17 +1858,6 @@
 
 
     if (teacherPhoto) {
-
-      if (
-        activeVoiceObjectUrl
-      ) {
-
-        URL.revokeObjectURL(
-          activeVoiceObjectUrl
-        );
-
-      }
-
 
       const url =
         URL.createObjectURL(
@@ -1578,6 +1943,19 @@
         " of " +
         currentScenes.length;
 
+
+    // Scene audio elements को collect करें
+    const allAudio =
+      document.querySelectorAll(
+        "#scenes audio"
+      );
+
+
+    sceneAudioElements =
+      Array.from(
+        allAudio
+      );
+
   }
 
 
@@ -1654,10 +2032,8 @@
 
         stopPlaying();
 
-
         currentScene =
           0;
-
 
         showScene();
 
@@ -1666,7 +2042,7 @@
 
 
   // ==========================================
-  // PLAY
+  // PLAY VIDEO
   // ==========================================
 
   document
@@ -1709,12 +2085,85 @@
         "▶ Playing...";
 
 
-    speakCurrentScene();
+    playCurrentSceneAudio();
+
+  }
 
 
-    playTimer =
-      setInterval(
+  // ==========================================
+  // PLAY CURRENT SCENE AUDIO
+  // ==========================================
+
+  function playCurrentSceneAudio() {
+
+    if (
+      !playing ||
+      !currentScenes.length
+    ) {
+
+      return;
+
+    }
+
+
+    // पहले browser speech बंद करें
+    if (
+      "speechSynthesis"
+      in window
+    ) {
+
+      speechSynthesis.cancel();
+
+    }
+
+
+    stopAllSceneAudio();
+
+
+    // ========================================
+    // USER RECORDED VOICE AVAILABLE
+    // ========================================
+
+    if (
+      sceneAudioUrls[currentScene]
+    ) {
+
+      const audio =
+        new Audio(
+          sceneAudioUrls[currentScene]
+        );
+
+
+      sceneAudioElements.push(
+        audio
+      );
+
+
+      audio.currentTime =
+        0;
+
+
+      audio.onplay =
         function() {
+
+          document
+            .getElementById(
+              "videoStatus"
+            )
+            .textContent =
+              "🎙️ आपकी आवाज़ चल रही है...";
+
+        };
+
+
+      audio.onended =
+        function() {
+
+          if (!playing) {
+
+            return;
+
+          }
 
 
           if (
@@ -1726,27 +2175,56 @@
 
             showScene();
 
-            speakCurrentScene();
-
+            playCurrentSceneAudio();
 
           } else {
 
-            stopPlaying();
-
-
-            document
-              .getElementById(
-                "videoStatus"
-              )
-              .textContent =
-                "✅ Video completed.";
+            finishVideo();
 
           }
 
+        };
 
-        },
-        5000
+
+      audio.onerror =
+        function() {
+
+          document
+            .getElementById(
+              "videoStatus"
+            )
+            .textContent =
+              "❌ Recorded voice playback failed.";
+
+        };
+
+
+      audio.play().catch(
+        function(error) {
+
+          console.error(error);
+
+          document
+            .getElementById(
+              "videoStatus"
+            )
+            .textContent =
+              "❌ Voice playback failed.";
+
+        }
       );
+
+
+      return;
+
+    }
+
+
+    // ========================================
+    // FALLBACK BROWSER VOICE
+    // ========================================
+
+    speakCurrentScene(true);
 
   }
 
@@ -1771,17 +2249,7 @@
       false;
 
 
-    if (playTimer) {
-
-      clearInterval(
-        playTimer
-      );
-
-
-      playTimer =
-        null;
-
-    }
+    stopAllSceneAudio();
 
 
     if (
@@ -1805,6 +2273,39 @@
 
 
   // ==========================================
+  // FINISH VIDEO
+  // ==========================================
+
+  function finishVideo() {
+
+    playing =
+      false;
+
+
+    stopAllSceneAudio();
+
+
+    if (
+      "speechSynthesis"
+      in window
+    ) {
+
+      speechSynthesis.cancel();
+
+    }
+
+
+    document
+      .getElementById(
+        "videoStatus"
+      )
+      .textContent =
+        "✅ Video completed.";
+
+  }
+
+
+  // ==========================================
   // VOICE BUTTON
   // ==========================================
 
@@ -1814,15 +2315,23 @@
     )
     .addEventListener(
       "click",
-      speakCurrentScene
+      function() {
+
+        stopPlaying();
+
+        speakCurrentScene(false);
+
+      }
     );
 
 
   // ==========================================
-  // BROWSER VOICE
+  // SPEAK CURRENT SCENE
   // ==========================================
 
-  function speakCurrentScene() {
+  function speakCurrentScene(
+    fromVideoPlayback = false
+  ) {
 
     if (
       !currentScenes.length
@@ -1832,6 +2341,103 @@
 
     }
 
+
+    // अगर user की recorded voice है
+    if (
+      sceneAudioUrls[currentScene]
+    ) {
+
+      const audio =
+        new Audio(
+          sceneAudioUrls[currentScene]
+        );
+
+
+      sceneAudioElements.push(
+        audio
+      );
+
+
+      audio.currentTime =
+        0;
+
+
+      audio.onplay =
+        function() {
+
+          document
+            .getElementById(
+              "videoStatus"
+            )
+            .textContent =
+              "🎙️ आपकी recorded voice चल रही है...";
+
+        };
+
+
+      audio.onended =
+        function() {
+
+          if (
+            fromVideoPlayback &&
+            playing
+          ) {
+
+            if (
+              currentScene <
+              currentScenes.length - 1
+            ) {
+
+              currentScene++;
+
+              showScene();
+
+              playCurrentSceneAudio();
+
+            } else {
+
+              finishVideo();
+
+            }
+
+          } else {
+
+            document
+              .getElementById(
+                "videoStatus"
+              )
+              .textContent =
+                "✅ Voice completed.";
+
+          }
+
+        };
+
+
+      audio.play().catch(
+        function(error) {
+
+          console.error(error);
+
+          document
+            .getElementById(
+              "videoStatus"
+            )
+            .textContent =
+              "❌ Recorded voice playback failed.";
+
+        }
+      );
+
+
+      return;
+
+    }
+
+
+    // ========================================
+    // BROWSER VOICE FALLBACK
+    // ========================================
 
     if (
       !(
@@ -1881,10 +2487,8 @@
     speech.rate =
       0.9;
 
-
     speech.pitch =
       1;
-
 
     speech.volume =
       1;
@@ -1898,7 +2502,7 @@
             "videoStatus"
           )
           .textContent =
-            "🔊 Voice playing...";
+            "🔊 Browser voice playing...";
 
       };
 
@@ -1906,7 +2510,29 @@
     speech.onend =
       function() {
 
-        if (!playing) {
+        if (
+          fromVideoPlayback &&
+          playing
+        ) {
+
+          if (
+            currentScene <
+            currentScenes.length - 1
+          ) {
+
+            currentScene++;
+
+            showScene();
+
+            playCurrentSceneAudio();
+
+          } else {
+
+            finishVideo();
+
+          }
+
+        } else {
 
           document
             .getElementById(
