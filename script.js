@@ -1,8 +1,8 @@
-
 let currentScenes = [];
 let currentSceneIndex = 0;
 let isPlaying = false;
 let playTimer = null;
+let currentAudio = null;
 
 function escapeHTML(text) {
   return String(text)
@@ -183,6 +183,7 @@ function createEducationalVideo() {
 
   currentSceneIndex = 0;
   isPlaying = false;
+  stopAudio();
 
   videoArea.innerHTML = `
     <div
@@ -223,7 +224,7 @@ function createEducationalVideo() {
         <button onclick="togglePlay()">▶ / ⏸ Play</button>
         <button onclick="nextScene()">Next ▶</button>
         <button onclick="restartVideo()">🔄 Restart</button>
-        <button onclick="speakCurrentScene()">🔊 Voice</button>
+        <button onclick="speakCurrentScene()">🔊 My Voice</button>
       </div>
 
       <div
@@ -255,7 +256,7 @@ function createEducationalVideo() {
           margin-top:15px;
         "
       >
-        Preview mode: narration uses your browser's built-in text-to-speech.
+        Voice narration uses your connected ElevenLabs voice.
       </p>
 
     </div>
@@ -314,40 +315,113 @@ function showScene(index) {
   }
 }
 
-function speakCurrentScene() {
-  if (!("speechSynthesis" in window)) {
-    alert("Voice narration is not supported in this browser.");
+/*
+  ELEVENLABS VOICE
+*/
+async function speakCurrentScene() {
+  const scene = currentScenes[currentSceneIndex];
+
+  if (!scene || !scene.narration) {
+    alert("Narration text is not available.");
     return;
   }
 
-  window.speechSynthesis.cancel();
+  try {
+    stopAudio();
 
-  const scene = currentScenes[currentSceneIndex];
+    const voiceId =
+      localStorage.getItem("teachgenai_voice_id");
 
-  const utterance = new SpeechSynthesisUtterance(scene.narration);
+    if (!voiceId) {
+      alert(
+        "Your cloned voice is not connected yet. Please create your voice first."
+      );
+      return;
+    }
 
-  const language = document.getElementById("language").value;
+    const response = await fetch("/api/voice", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "speech",
+        voiceId: voiceId,
+        text: scene.narration
+      })
+    });
 
-  utterance.lang =
-    language === "Hindi"
-      ? "hi-IN"
-      : "en-US";
+    const data = await response.json();
 
-  utterance.rate = 0.9;
-  utterance.pitch = 1;
+    if (!response.ok) {
+      throw new Error(
+        data?.error ||
+        "ElevenLabs speech generation failed"
+      );
+    }
 
-  window.speechSynthesis.speak(utterance);
+    if (!data.audioBase64) {
+      throw new Error("No audio was returned.");
+    }
+
+    currentAudio = new Audio(
+      "data:audio/mpeg;base64," +
+      data.audioBase64
+    );
+
+    currentAudio.onended = function () {
+      if (isPlaying) {
+        moveToNextScene();
+      }
+    };
+
+    await currentAudio.play();
+
+  } catch (error) {
+    console.error("Voice error:", error);
+
+    alert(
+      "Voice generation failed: " +
+      (error?.message || "Unknown error")
+    );
+  }
+}
+
+function stopAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+function moveToNextScene() {
+  clearTimeout(playTimer);
+
+  if (currentSceneIndex < currentScenes.length - 1) {
+    currentSceneIndex++;
+    showScene(currentSceneIndex);
+
+    if (isPlaying) {
+      speakCurrentScene();
+    }
+  } else {
+    stopVideo();
+  }
 }
 
 function nextScene() {
-  window.speechSynthesis.cancel();
+  stopAudio();
 
   if (currentSceneIndex < currentScenes.length - 1) {
     showScene(currentSceneIndex + 1);
 
     if (isPlaying) {
       speakCurrentScene();
-      startSceneTimer();
     }
   } else {
     stopVideo();
@@ -355,7 +429,7 @@ function nextScene() {
 }
 
 function previousScene() {
-  window.speechSynthesis.cancel();
+  stopAudio();
 
   if (currentSceneIndex > 0) {
     showScene(currentSceneIndex - 1);
@@ -376,7 +450,6 @@ function togglePlay() {
   isPlaying = true;
 
   speakCurrentScene();
-  startSceneTimer();
 }
 
 function startSceneTimer() {
@@ -385,14 +458,7 @@ function startSceneTimer() {
   playTimer = setTimeout(() => {
     if (!isPlaying) return;
 
-    if (currentSceneIndex < currentScenes.length - 1) {
-      currentSceneIndex++;
-      showScene(currentSceneIndex);
-      speakCurrentScene();
-      startSceneTimer();
-    } else {
-      stopVideo();
-    }
+    moveToNextScene();
   }, 6000);
 }
 
@@ -401,7 +467,5 @@ function stopVideo() {
 
   clearTimeout(playTimer);
 
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
+  stopAudio();
 }
