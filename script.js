@@ -1,8 +1,9 @@
 let currentScenes = [];
 let currentSceneIndex = 0;
 let isPlaying = false;
-let playTimer = null;
 let currentAudio = null;
+let speechVoices = [];
+let selectedLanguage = "English";
 
 function escapeHTML(text) {
   return String(text)
@@ -13,10 +14,41 @@ function escapeHTML(text) {
     .replace(/'/g, "&#039;");
 }
 
+// Load voices provided by the browser
+function loadSpeechVoices() {
+  if ("speechSynthesis" in window) {
+    speechVoices = window.speechSynthesis.getVoices();
+  }
+}
+
+if ("speechSynthesis" in window) {
+  loadSpeechVoices();
+  window.speechSynthesis.onvoiceschanged = loadSpeechVoices;
+}
+
+function getSelectedVoice(language) {
+  loadSpeechVoices();
+
+  if (language === "Hindi") {
+    return speechVoices.find(v => /^hi([-_]|$)/i.test(v.lang))
+      || speechVoices.find(v => /hindi/i.test(v.name))
+      || null;
+  }
+
+  return speechVoices.find(v => /^en([-_]|$)/i.test(v.lang))
+    || speechVoices.find(v => /english/i.test(v.name))
+    || null;
+}
+
 function generateLesson() {
   const topicInput = document.getElementById("topic");
   const languageInput = document.getElementById("language");
   const result = document.getElementById("result");
+
+  if (!topicInput || !languageInput || !result) {
+    alert("Topic, Language, or Result field is missing. Please check index.html.");
+    return;
+  }
 
   const topic = topicInput.value.trim();
   const language = languageInput.value;
@@ -26,39 +58,39 @@ function generateLesson() {
     return;
   }
 
-  const safeTopic = escapeHTML(topic);
+  selectedLanguage = language === "Hindi" ? "Hindi" : "English";
 
-  if (language === "Hindi") {
+  if (selectedLanguage === "Hindi") {
     currentScenes = [
       {
         title: "परिचय",
         visual: `${topic} का परिचय`,
-        text: `${topic} क्या है और यह क्यों महत्वपूर्ण है?`,
-        narration: `${topic} के बारे में आज हम सरल भाषा में सीखेंगे।`
+        text: `${topic} क्या है?`,
+        narration: `नमस्कार विद्यार्थियों! आज हम ${topic} के बारे में सरल भाषा में सीखेंगे। इस पाठ में हम इसका परिचय, मुख्य अवधारणाएँ और उदाहरण समझेंगे।`
       },
       {
         title: "मुख्य अवधारणा",
         visual: `${topic} की मुख्य अवधारणा`,
-        text: `${topic} के मुख्य बिंदु`,
-        narration: `${topic} को समझने के लिए इसकी मुख्य अवधारणा को समझना जरूरी है।`
+        text: "मुख्य अवधारणाएँ समझें",
+        narration: `${topic} को अच्छी तरह समझने के लिए इसकी मुख्य अवधारणाओं को जानना जरूरी है। ध्यान से समझें और महत्वपूर्ण बिंदुओं को अपनी नोटबुक में लिखें।`
       },
       {
         title: "उदाहरण",
-        visual: `${topic} का सरल उदाहरण`,
-        text: `एक आसान उदाहरण`,
-        narration: `${topic} को एक सरल उदाहरण की सहायता से समझते हैं।`
+        visual: `${topic} का उदाहरण`,
+        text: "आसान उदाहरण से सीखें",
+        narration: `अब ${topic} को एक आसान उदाहरण की मदद से समझते हैं। अपने आसपास के जीवन में इससे संबंधित उदाहरण खोजने की कोशिश करें। इससे विषय समझना आसान होगा।`
       },
       {
         title: "महत्वपूर्ण बिंदु",
-        visual: `${topic} के महत्वपूर्ण बिंदु`,
-        text: `मुख्य तथ्य और उपयोग`,
-        narration: `${topic} के कुछ महत्वपूर्ण तथ्य और इसके उपयोग याद रखना जरूरी है।`
+        visual: `${topic} के उपयोग`,
+        text: "मुख्य बिंदु और उपयोग",
+        narration: `${topic} से संबंधित महत्वपूर्ण बिंदुओं को याद रखें। इसके उपयोग और विशेषताओं को समझना भी जरूरी है। अभ्यास करने से आपकी समझ बेहतर होगी।`
       },
       {
         title: "सारांश",
         visual: `${topic} का सारांश`,
-        text: `आज हमने क्या सीखा?`,
-        narration: `आज हमने ${topic} की मुख्य अवधारणाओं को समझा।`
+        text: "आज हमने क्या सीखा?",
+        narration: `आइए आज के पाठ को दोहराते हैं। हमने ${topic} का परिचय, मुख्य अवधारणाएँ, उदाहरण और महत्वपूर्ण बिंदु समझे। धन्यवाद विद्यार्थियों!`
       }
     ];
   } else {
@@ -67,76 +99,63 @@ function generateLesson() {
         title: "Introduction",
         visual: `Introduction to ${topic}`,
         text: `What is ${topic}?`,
-        narration: `Today we will learn about ${topic} in a simple and easy way.`
+        narration: `Hello students! Today we will learn about ${topic} in simple language. In this lesson, we will explore the introduction, main concepts, and examples.`
       },
       {
         title: "Main Concept",
-        visual: `Main concept of ${topic}`,
-        text: `Key concepts`,
-        narration: `To understand ${topic}, we first need to understand its main concept.`
+        visual: `Main concepts of ${topic}`,
+        text: "Understand the main concepts",
+        narration: `To understand ${topic}, we need to learn its main concepts. Listen carefully and write down the important points in your notebook.`
       },
       {
         title: "Example",
-        visual: `Simple example of ${topic}`,
-        text: `An easy example`,
-        narration: `Let us understand ${topic} with a simple example.`
+        visual: `An example of ${topic}`,
+        text: "Learn with a simple example",
+        narration: `Now let us understand ${topic} with a simple example. Try to find examples related to this topic in everyday life. This can make learning easier.`
       },
       {
         title: "Important Points",
         visual: `Important points about ${topic}`,
-        text: `Key facts and applications`,
-        narration: `There are several important facts and applications related to ${topic}.`
+        text: "Key points and applications",
+        narration: `Remember the important points related to ${topic}. Understanding its uses and features is also important. Regular practice can improve your understanding.`
       },
       {
         title: "Summary",
         visual: `Summary of ${topic}`,
-        text: `What did we learn?`,
-        narration: `Today we learned the important concepts of ${topic}.`
+        text: "What did we learn?",
+        narration: `Let us review today's lesson. We learned the introduction, main concepts, examples, and important points about ${topic}. Thank you, students!`
       }
     ];
   }
 
-  result.style.display = "block";
+  stopVideo();
 
+  const safeTopic = escapeHTML(topic);
+
+  result.style.display = "block";
   result.innerHTML = `
-    <h2>
-      ${safeTopic} ${language === "Hindi" ? "— शैक्षिक पाठ" : "— Educational Lesson"}
-    </h2>
+    <h2>${safeTopic} — ${selectedLanguage === "Hindi" ? "शैक्षिक पाठ" : "Educational Lesson"}</h2>
 
     <p>
-      ${
-        language === "Hindi"
-          ? `${safeTopic} को सरल भाषा में समझें।`
-          : `Learn ${safeTopic} in a simple and easy-to-understand way.`
-      }
+      ${selectedLanguage === "Hindi"
+        ? `${safeTopic} को सरल भाषा में समझें।`
+        : `Learn about ${safeTopic} in a simple way.`}
     </p>
 
-    <h3>Learning Objectives</h3>
+    <h3>${selectedLanguage === "Hindi" ? "सीखने के उद्देश्य" : "Learning Objectives"}</h3>
 
     <ul>
-      <li>Understand the basic concept of ${safeTopic}</li>
-      <li>Learn important points and applications</li>
-      <li>Review the topic through a structured lesson</li>
+      <li>${selectedLanguage === "Hindi" ? "विषय की मूल अवधारणा समझना" : "Understand the basic concept"}</li>
+      <li>${selectedLanguage === "Hindi" ? "महत्वपूर्ण बिंदु और उपयोग सीखना" : "Learn important points and applications"}</li>
+      <li>${selectedLanguage === "Hindi" ? "पाठ का दोहराव करना" : "Review the lesson"}</li>
     </ul>
 
     <h3>🎬 Educational Video Storyboard</h3>
-
     <div id="storyboard"></div>
 
     <button
       onclick="createEducationalVideo()"
-      style="
-        margin-top:20px;
-        background:#16a34a;
-        color:white;
-        border:none;
-        padding:15px;
-        border-radius:10px;
-        font-size:17px;
-        font-weight:bold;
-        width:100%;
-        cursor:pointer;
-      "
+      style="margin-top:20px;background:#16a34a;color:white;border:none;padding:15px;border-radius:10px;font-size:17px;font-weight:bold;width:100%;cursor:pointer;"
     >
       🎥 Create Educational Video
     </button>
@@ -149,27 +168,15 @@ function generateLesson() {
 
 function renderStoryboard() {
   const storyboard = document.getElementById("storyboard");
-
   if (!storyboard) return;
 
   storyboard.innerHTML = currentScenes.map((scene, index) => `
-    <div class="scene">
+    <div class="scene" style="padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:10px;">
       <b>Scene ${index + 1} — ${escapeHTML(scene.title)}</b>
-
-      <p>
-        <strong>Visual:</strong>
-        ${escapeHTML(scene.visual)}
-      </p>
-
-      <p>
-        <strong>On-screen text:</strong>
-        ${escapeHTML(scene.text)}
-      </p>
-
-      <p>
-        <strong>Narration:</strong>
-        ${escapeHTML(scene.narration)}
-      </p>
+      <p><strong>Visual:</strong> ${escapeHTML(scene.visual)}</p>
+      <p><strong>On-screen text:</strong> ${escapeHTML(scene.text)}</p>
+      <p><strong>Narration:</strong> ${escapeHTML(scene.narration)}</p>
+      <button onclick="speakScene(${index})">🔊 ${selectedLanguage === "Hindi" ? "यह दृश्य सुनें" : "Listen to this scene"}</button>
     </div>
   `).join("");
 }
@@ -178,87 +185,37 @@ function createEducationalVideo() {
   const videoArea = document.getElementById("videoArea");
 
   if (!videoArea || currentScenes.length === 0) {
+    alert("Please generate a lesson first.");
     return;
   }
 
+  stopVideo();
   currentSceneIndex = 0;
-  isPlaying = false;
-  stopAudio();
 
   videoArea.innerHTML = `
-    <div
-      style="
-        margin-top:25px;
-        padding:20px;
-        background:white;
-        border-radius:14px;
-        border:2px solid #2563eb;
-      "
-    >
-
+    <div style="margin-top:25px;padding:20px;background:white;border-radius:14px;border:2px solid #2563eb;">
       <h2>🎥 Educational Video Preview</h2>
 
-      <div
-        id="videoScreen"
-        style="
-          min-height:220px;
-          padding:25px;
-          border-radius:12px;
-          background:#eef4ff;
-          display:flex;
-          flex-direction:column;
-          justify-content:center;
-          text-align:center;
-        "
-      ></div>
+      <div id="videoScreen" style="min-height:220px;padding:25px;border-radius:12px;background:#eef4ff;display:flex;flex-direction:column;justify-content:center;text-align:center;"></div>
 
-      <div
-        style="
-          display:flex;
-          gap:8px;
-          flex-wrap:wrap;
-          margin-top:15px;
-        "
-      >
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:15px;">
         <button onclick="previousScene()">◀ Previous</button>
         <button onclick="togglePlay()">▶ / ⏸ Play</button>
         <button onclick="nextScene()">Next ▶</button>
         <button onclick="restartVideo()">🔄 Restart</button>
-        <button onclick="speakCurrentScene()">🔊 My Voice</button>
+        <button onclick="speakCurrentScene()">🔊 Listen</button>
       </div>
 
-      <div
-        style="
-          margin-top:15px;
-          background:#ddd;
-          height:8px;
-          border-radius:8px;
-          overflow:hidden;
-        "
-      >
-        <div
-          id="progressBar"
-          style="
-            width:0%;
-            height:100%;
-            background:#2563eb;
-            transition:width .3s;
-          "
-        ></div>
+      <div style="margin-top:15px;background:#ddd;height:8px;border-radius:8px;overflow:hidden;">
+        <div id="progressBar" style="width:0%;height:100%;background:#2563eb;transition:width .3s;"></div>
       </div>
 
       <p id="sceneCounter"></p>
+      <p id="voiceStatus" role="status" style="font-size:14px;color:#555;"></p>
 
-      <p
-        style="
-          font-size:13px;
-          color:#555;
-          margin-top:15px;
-        "
-      >
-        Voice narration uses your connected ElevenLabs voice.
+      <p style="font-size:13px;color:#555;">
+        Voice uses your device's built-in browser speech service. This is not a clone of your own voice.
       </p>
-
     </div>
   `;
 
@@ -266,17 +223,11 @@ function createEducationalVideo() {
 }
 
 function showScene(index) {
-  if (index < 0) index = 0;
+  if (!currentScenes.length) return;
 
-  if (index >= currentScenes.length) {
-    stopVideo();
-    index = currentScenes.length - 1;
-  }
+  currentSceneIndex = Math.max(0, Math.min(index, currentScenes.length - 1));
 
-  currentSceneIndex = index;
-
-  const scene = currentScenes[index];
-
+  const scene = currentScenes[currentSceneIndex];
   const screen = document.getElementById("videoScreen");
   const progress = document.getElementById("progressBar");
   const counter = document.getElementById("sceneCounter");
@@ -285,106 +236,98 @@ function showScene(index) {
 
   screen.innerHTML = `
     <div style="font-size:14px;color:#2563eb;font-weight:bold;">
-      SCENE ${index + 1}
+      SCENE ${currentSceneIndex + 1}
     </div>
-
     <h2>${escapeHTML(scene.title)}</h2>
-
-    <div
-      style="
-        font-size:55px;
-        margin:10px;
-      "
-    >
-      🎓
-    </div>
-
+    <div style="font-size:55px;margin:10px;">🎓</div>
     <h3>${escapeHTML(scene.text)}</h3>
-
     <p>${escapeHTML(scene.visual)}</p>
   `;
 
   if (progress) {
     progress.style.width =
-      ((index + 1) / currentScenes.length * 100) + "%";
+      ((currentSceneIndex + 1) / currentScenes.length * 100) + "%";
   }
 
   if (counter) {
-    counter.textContent =
-      `Scene ${index + 1} of ${currentScenes.length}`;
+    counter.textContent = `Scene ${currentSceneIndex + 1} of ${currentScenes.length}`;
   }
 }
 
-/*
-  ELEVENLABS VOICE
-*/
-async function speakCurrentScene() {
+function speakScene(index) {
+  if (index < 0 || index >= currentScenes.length) return;
+
+  stopAudio();
+  currentSceneIndex = index;
+  showScene(index);
+  speakText(currentScenes[index].narration);
+}
+
+function speakCurrentScene() {
   const scene = currentScenes[currentSceneIndex];
 
-  if (!scene || !scene.narration) {
-    alert("Narration text is not available.");
+  if (!scene) {
+    alert("Please generate a lesson first.");
     return;
   }
 
-  try {
-    stopAudio();
+  speakText(scene.narration);
+}
 
-    const voiceId =
-      localStorage.getItem("teachgenai_voice_id");
-
-    if (!voiceId) {
-      alert(
-        "Your cloned voice is not connected yet. Please create your voice first."
-      );
-      return;
-    }
-
-    const response = await fetch("/api/voice", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        action: "speech",
-        voiceId: voiceId,
-        text: scene.narration
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(
-        data?.error ||
-        "ElevenLabs speech generation failed"
-      );
-    }
-
-    if (!data.audioBase64) {
-      throw new Error("No audio was returned.");
-    }
-
-    currentAudio = new Audio(
-      "data:audio/mpeg;base64," +
-      data.audioBase64
-    );
-
-    currentAudio.onended = function () {
-      if (isPlaying) {
-        moveToNextScene();
-      }
-    };
-
-    await currentAudio.play();
-
-  } catch (error) {
-    console.error("Voice error:", error);
-
-    alert(
-      "Voice generation failed: " +
-      (error?.message || "Unknown error")
-    );
+function speakText(text) {
+  if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+    alert("Sorry, speech is not supported by this browser. Try opening the site in Chrome.");
+    return;
   }
+
+  stopAudio();
+
+  const status = document.getElementById("voiceStatus");
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  utterance.lang = selectedLanguage === "Hindi" ? "hi-IN" : "en-US";
+  utterance.rate = 0.9;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+
+  const voice = getSelectedVoice(selectedLanguage);
+  if (voice) {
+    utterance.voice = voice;
+    utterance.lang = voice.lang;
+  }
+
+  utterance.onstart = () => {
+    if (status) {
+      status.textContent = selectedLanguage === "Hindi"
+        ? "🔊 पाठ पढ़ा जा रहा है..."
+        : "🔊 Reading the lesson...";
+    }
+  };
+
+  utterance.onend = () => {
+    if (status) status.textContent = "✅ Narration finished.";
+
+    if (isPlaying) {
+      if (currentSceneIndex < currentScenes.length - 1) {
+        currentSceneIndex++;
+        showScene(currentSceneIndex);
+        speakText(currentScenes[currentSceneIndex].narration);
+      } else {
+        stopVideo();
+        if (status) status.textContent = "✅ Lesson completed.";
+      }
+    }
+  };
+
+  utterance.onerror = (event) => {
+    console.error("Speech error:", event);
+    if (status) {
+      status.textContent = "Voice playback failed. Check your browser's speech settings.";
+    }
+    isPlaying = false;
+  };
+
+  window.speechSynthesis.speak(utterance);
 }
 
 function stopAudio() {
@@ -399,8 +342,8 @@ function stopAudio() {
   }
 }
 
-function moveToNextScene() {
-  clearTimeout(playTimer);
+function nextScene() {
+  stopAudio();
 
   if (currentSceneIndex < currentScenes.length - 1) {
     currentSceneIndex++;
@@ -414,25 +357,16 @@ function moveToNextScene() {
   }
 }
 
-function nextScene() {
-  stopAudio();
-
-  if (currentSceneIndex < currentScenes.length - 1) {
-    showScene(currentSceneIndex + 1);
-
-    if (isPlaying) {
-      speakCurrentScene();
-    }
-  } else {
-    stopVideo();
-  }
-}
-
 function previousScene() {
   stopAudio();
 
   if (currentSceneIndex > 0) {
-    showScene(currentSceneIndex - 1);
+    currentSceneIndex--;
+    showScene(currentSceneIndex);
+
+    if (isPlaying) {
+      speakCurrentScene();
+    }
   }
 }
 
@@ -447,25 +381,18 @@ function togglePlay() {
     return;
   }
 
+  if (!currentScenes.length) {
+    alert("Please generate a lesson first.");
+    return;
+  }
+
   isPlaying = true;
-
   speakCurrentScene();
-}
-
-function startSceneTimer() {
-  clearTimeout(playTimer);
-
-  playTimer = setTimeout(() => {
-    if (!isPlaying) return;
-
-    moveToNextScene();
-  }, 6000);
 }
 
 function stopVideo() {
   isPlaying = false;
-
-  clearTimeout(playTimer);
-
   stopAudio();
 }
+
+window.addEventListener("pagehide", stopVideo);
