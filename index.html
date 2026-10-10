@@ -1,702 +1,524 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TeachGenAI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TeachGenAI - AI Educational Video Generator</title>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
-header{background:white;padding:18px 20px;border-bottom:1px solid #ddd;position:sticky;top:0;z-index:10}
-header h1{margin:0;font-size:28px}
-header p{margin:5px 0 0;color:#667085}
-.container{max-width:900px;margin:auto;padding:20px 15px 60px}
-.card{background:white;border-radius:16px;padding:20px;margin-bottom:20px;box-shadow:0 4px 18px #0000000c}
-label{display:block;font-weight:bold;margin:12px 0 7px}
-input,select{width:100%;padding:12px;border:1px solid #d0d5dd;border-radius:10px;font-size:16px}
-button{border:0;border-radius:10px;padding:12px 15px;margin:5px 4px 5px 0;font-size:15px;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.5}
-.primary{background:#2563eb;color:white}
-.success{background:#16a34a;color:white}
-.danger{background:#dc2626;color:white}
-.gray{background:#eef0f3;color:#344054}
-.secondary{background:#eef2ff;color:#3730a3}
-.status{margin-top:12px;padding:12px;border-radius:10px;background:#f2f4f7;overflow-wrap:anywhere}
-.warning{background:#fff7ed;color:#9a3412;padding:13px;border-radius:10px;margin-top:12px}
-.successBox{background:#ecfdf3;color:#166534;padding:13px;border-radius:10px;margin-top:12px}
-.hidden{display:none!important}
-.photo{width:120px;height:120px;object-fit:cover;border-radius:50%;display:none;margin-top:10px}
-.scene{background:#fafbfc;border:1px solid #e1e5ea;border-radius:14px;padding:16px;margin-top:15px}
-.sceneVoice{background:white;border:1px solid #e1e5ea;border-radius:12px;padding:12px;margin-top:15px}
-.sceneStatus{margin:8px 0;color:#667085}
-.preview{background:#111827;color:white;border-radius:16px;padding:25px 15px;text-align:center;min-height:240px}
-.preview img{max-width:100%;max-height:180px;border-radius:12px;display:none;margin:auto}
-.small{font-size:13px;color:#667085}
-.controls{text-align:center;margin-top:12px}
+body{
+  margin:0;padding:16px;
+  font-family:Arial,sans-serif;
+  background:#f1f5f9;color:#172033
+}
+header{
+  background:#173b72;color:white;
+  padding:22px 14px;border-radius:15px;
+  text-align:center;margin-bottom:18px
+}
+header h1{margin:0 0 8px}
+header p{margin:0}
+.card{
+  background:white;padding:18px;
+  border-radius:14px;margin:14px 0;
+  box-shadow:0 3px 12px #0000000d
+}
+h2{font-size:20px;margin-top:0}
+label{display:block;font-weight:bold;margin:14px 0 7px}
+input,select,textarea{
+  width:100%;padding:12px;
+  border:1px solid #cbd5e1;
+  border-radius:8px;font-size:16px;
+  background:white
+}
+button{
+  width:100%;padding:13px;margin-top:10px;
+  border:0;border-radius:9px;
+  background:#2563eb;color:white;
+  font-size:16px;font-weight:bold;
+  cursor:pointer
+}
+button:disabled{opacity:.6}
+button.secondary{background:#475569}
+button.green{background:#16803d}
+button.orange{background:#b45309}
+.status{
+  padding:12px;background:#eff6ff;
+  border-radius:8px;margin-top:12px;
+  overflow-wrap:anywhere
+}
+.warning{
+  background:#fff7ed;padding:12px;
+  border-radius:8px;font-size:14px;line-height:1.6
+}
+#photoPreview{
+  display:none;width:150px;max-height:180px;
+  object-fit:cover;border-radius:12px;
+  margin-top:12px
+}
+.scene{
+  border:1px solid #dbe3ef;
+  padding:14px;border-radius:10px;margin:12px 0
+}
+.scene h3{margin-top:0}
+#videoStage{
+  background:#111827;color:white;
+  padding:18px;border-radius:12px;
+  text-align:center;min-height:200px
+}
+#videoPhoto{
+  display:none;max-width:140px;max-height:140px;
+  object-fit:cover;border-radius:50%;margin:8px auto
+}
+.small{font-size:13px;color:#64748b;line-height:1.5}
+footer{text-align:center;padding:20px;color:#64748b}
 </style>
 </head>
 
 <body>
+
 <header>
-<h1>🎓 TeachGenAI</h1>
-<p>AI Educational Video Generator</p>
+  <h1>🎓 TeachGenAI</h1>
+  <p>AI Educational Video Generator</p>
 </header>
 
-<div class="container">
-
 <div class="card">
-<h2>👨‍🏫 Teacher Profile</h2>
+  <h2>👨‍🏫 Teacher Profile</h2>
 
-<label>Teacher Photo</label>
-<input type="file" id="photoInput" accept="image/*">
-<img id="photoPreview" class="photo" alt="Teacher photo">
-
-<label>Your Voice Sample (optional)</label>
-<input type="file" id="voiceInput" accept="audio/*">
-<audio id="voicePlayer" controls class="hidden"></audio>
-
-<button id="recordGeneralBtn" class="secondary">🎙️ Record My Voice</button>
-<button id="stopGeneralBtn" class="danger hidden">⏹ Stop Recording</button>
-<button id="playGeneralBtn" class="secondary hidden">▶ Play My Voice</button>
-
-<div id="generalVoiceStatus" class="status">No voice recording selected.</div>
+  <label>अपनी फोटो अपलोड करें</label>
+  <input type="file" id="photoInput" accept="image/*">
+  <img id="photoPreview" alt="Your teacher photo">
 </div>
 
 <div class="card">
-<h2>📚 Generate Educational Lesson</h2>
+  <h2>🎙️ आपकी अपनी आवाज़</h2>
 
-<label>Topic</label>
-<input id="topicInput" placeholder="Example: Computer">
+  <p class="small">
+    साफ आवाज़ में रिकॉर्डिंग करें। Voice Clone बनाने के लिए
+    आपकी रिकॉर्डिंग ElevenLabs API पर भेजी जाएगी।
+  </p>
 
-<label>Language</label>
-<select id="languageInput">
-<option value="English">English</option>
-<option value="Hindi">Hindi</option>
-</select>
+  <label>आवाज की रिकॉर्डिंग</label>
+  <input type="file" id="voiceInput" accept="audio/*">
 
-<button id="generateBtn" class="primary">✨ Generate Lesson</button>
-<div id="generationStatus" class="status hidden"></div>
+  <button id="recordBtn" class="green">🔴 अपनी आवाज़ रिकॉर्ड करें</button>
+  <button id="stopBtn" class="secondary" disabled>⏹ रिकॉर्डिंग रोकें</button>
+
+  <audio id="voicePlayer" controls style="width:100%;display:none;margin-top:12px"></audio>
+
+  <button id="cloneBtn">🗣️ मेरी आवाज़ का Voice Clone बनाएँ</button>
+
+  <div id="voiceStatus" class="status" role="status" aria-live="polite">
+    अभी अपनी आवाज़ रिकॉर्ड करें या ऑडियो फ़ाइल चुनें।
+  </div>
+
+  <p class="small">
+    नोट: Voice Clone की सुविधा आपके ElevenLabs अकाउंट और उपलब्ध प्लान पर निर्भर है।
+    API Key वेबसाइट के कोड में नहीं, Vercel में सुरक्षित रहनी चाहिए।
+  </p>
 </div>
 
-<div id="lessonSection" class="card hidden">
-<h2>📖 Lesson Plan</h2>
-<div id="lessonContent"></div>
-<button id="createVideoBtn" class="success">🎬 Create Educational Video</button>
+<div class="card">
+  <h2>📚 Educational Lesson</h2>
+
+  <label>पाठ का विषय लिखें</label>
+  <input id="topicInput" placeholder="उदाहरण: Computer Network">
+
+  <label>भाषा चुनें</label>
+  <select id="languageInput">
+    <option value="Hindi">हिंदी</option>
+    <option value="English">English</option>
+  </select>
+
+  <button id="generateBtn">✨ पाठ तैयार करें</button>
+  <div id="lessonStatus" class="status" role="status" aria-live="polite">
+    अपना विषय लिखकर पाठ तैयार करें।
+  </div>
+
+  <div id="lessonOutput" style="white-space:pre-wrap;line-height:1.7;margin-top:14px"></div>
 </div>
 
-<div id="storyboardSection" class="card hidden">
-<h2>🎞️ Scene-by-Scene Storyboard</h2>
-<div id="scenesContainer"></div>
+<div class="card">
+  <h2>🎬 Educational Video Preview</h2>
+
+  <div id="videoStage">
+    <img id="videoPhoto" alt="Teacher">
+    <h3 id="sceneTitle">आपका पाठ यहाँ दिखेगा</h3>
+    <p id="sceneText">पहले पाठ तैयार करें।</p>
+  </div>
+
+  <button id="createScenesBtn" class="green" disabled>
+    🎞️ वीडियो सीन तैयार करें
+  </button>
+
+  <div id="scenesContainer"></div>
+
+  <button id="previousBtn" class="secondary" disabled>⬅ पिछला सीन</button>
+  <button id="playBtn" disabled>▶ अपनी क्लोन आवाज़ में सुनें</button>
+  <button id="stopAudioBtn" class="secondary">⏹ आवाज़ बंद करें</button>
+  <button id="nextBtn" class="secondary" disabled>अगला सीन ➡</button>
+
+  <div id="videoStatus" class="status" role="status" aria-live="polite">
+    पाठ तैयार होने के बाद सीन बनाएँ।
+  </div>
 </div>
 
-<div id="videoSection" class="card hidden">
-<h2>🎥 Educational Video Preview</h2>
-
-<div class="preview">
-<img id="videoPhoto" alt="Teacher">
-<h2 id="videoTitle">Scene 1</h2>
-<div id="videoText"></div>
-<p id="videoNarration"></p>
-</div>
-
-<input id="timeline" type="range" min="0" max="0" value="0">
-
-<div class="controls">
-<button id="previousBtn" class="gray">⏮ Previous</button>
-<button id="playBtn" class="primary">▶ Play</button>
-<button id="pauseBtn" class="gray">⏸ Pause</button>
-<button id="nextBtn" class="gray">Next ⏭</button>
-<button id="restartBtn" class="secondary">🔄 Restart</button>
-</div>
-
-<div id="videoStatus" class="status">Ready.</div>
-
-<div class="successBox">
-🔊 If a scene has a saved recording, it will play. Otherwise, your browser's available speech voice will be used.
-</div>
-
-<div class="warning">
-⚠️ Browser speech is not a clone of your voice. Hindi speech depends on the voices available on your phone.
-</div>
-
-<button id="clearOldRecordingsBtn" class="danger">🗑️ Delete All Old Scene Recordings</button>
-<p class="small">This removes saved recordings from this browser's TeachGenAI voice database. It cannot be undone.</p>
-</div>
-
-</div>
+<footer>TeachGenAI — Intelligent Educational Video Generation</footer>
 
 <script>
-"use strict";
-
-let currentScenes = [];
-let currentScene = 0;
-let playing = false;
-let teacherPhotoURL = null;
-let generalVoiceBlob = null;
-let generalRecorder = null;
-let generalChunks = [];
-let generalVoiceURL = null;
-let sceneAudioBlobs = [];
-let sceneAudioURLs = [];
-let activeAudio = null;
-let recordingStream = null;
-let sceneRecorder = null;
-let sceneChunks = [];
-let recordingSceneIndex = -1;
-let db = null;
-let selectedLanguage = "English";
-
-const DB_NAME = "TeachGenAI_Voices";
-const STORE_NAME = "sceneVoices";
-
 const $ = id => document.getElementById(id);
 
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, ch => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[ch]));
+let voiceBlob = null;
+let mediaRecorder = null;
+let audioChunks = [];
+let photoURL = "";
+let lessonText = "";
+let scenes = [];
+let currentScene = 0;
+let currentAudio = null;
+let voiceId = localStorage.getItem("teachgenai_voice_id") || "";
+
+function setStatus(id, message) {
+  $(id).textContent = message;
 }
 
-function openDatabase() {
-  return new Promise((resolve, reject) => {
-    if (!("indexedDB" in window)) {
-      reject(new Error("IndexedDB is not supported."));
-      return;
-    }
-
-    const request = indexedDB.open(DB_NAME, 1);
-
-    request.onupgradeneeded = event => {
-      const database = event.target.result;
-      if (!database.objectStoreNames.contains(STORE_NAME)) {
-        database.createObjectStore(STORE_NAME);
-      }
-    };
-
-    request.onsuccess = event => {
-      db = event.target.result;
-      resolve(db);
-    };
-
-    request.onerror = () => reject(request.error);
-  });
-}
-
-function getSceneVoice(index) {
-  return new Promise((resolve, reject) => {
-    if (!db) return resolve(null);
-
-    const tx = db.transaction(STORE_NAME, "readonly");
-    const request = tx.objectStore(STORE_NAME).get(String(index));
-    request.onsuccess = () => resolve(request.result || null);
-    request.onerror = () => reject(request.error);
-  });
-}
-
-function saveSceneVoice(index, blob) {
-  return new Promise((resolve, reject) => {
-    if (!db) return reject(new Error("Voice database is not ready."));
-
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    tx.objectStore(STORE_NAME).put(blob, String(index));
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
-function clearAllSceneVoices() {
-  return new Promise((resolve, reject) => {
-    if (!db) return reject(new Error("Voice database is not ready."));
-
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    tx.objectStore(STORE_NAME).clear();
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
-async function loadSavedVoices() {
-  sceneAudioBlobs = [];
-  sceneAudioURLs.forEach(url => {
-    if (url) URL.revokeObjectURL(url);
-  });
-  sceneAudioURLs = [];
-
-  for (let i = 0; i < currentScenes.length; i++) {
-    const blob = await getSceneVoice(i);
-    if (blob) {
-      sceneAudioBlobs[i] = blob;
-      sceneAudioURLs[i] = URL.createObjectURL(blob);
-    }
+function setBusy(button, busy, busyText) {
+  if (busy) {
+    button.dataset.oldText = button.textContent;
+    button.textContent = busyText;
+    button.disabled = true;
+  } else {
+    button.textContent = button.dataset.oldText || button.textContent;
+    button.disabled = false;
   }
 }
 
 function stopAudio() {
-  if (activeAudio) {
-    activeAudio.onended = null;
-    activeAudio.onerror = null;
-    activeAudio.pause();
-    try { activeAudio.currentTime = 0; } catch (_) {}
-    activeAudio = null;
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.src = "";
+    currentAudio = null;
   }
-
   if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel();
   }
 }
 
-function stopPlayback() {
-  playing = false;
-  stopAudio();
-  $("playBtn").textContent = "▶ Play";
-}
-
-function getBrowserVoice(language) {
-  if (!("speechSynthesis" in window)) return null;
-
-  const voices = window.speechSynthesis.getVoices();
-  if (language === "Hindi") {
-    return voices.find(v => /^hi([-_]|$)/i.test(v.lang))
-      || voices.find(v => /hindi/i.test(v.name))
-      || null;
-  }
-
-  return voices.find(v => /^en([-_]|$)/i.test(v.lang))
-    || voices.find(v => /english/i.test(v.name))
-    || null;
-}
-
-function speakBrowser(text) {
-  return new Promise(resolve => {
-    if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
-      $("videoStatus").textContent = "Speech is not supported in this browser.";
-      resolve();
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = selectedLanguage === "Hindi" ? "hi-IN" : "en-US";
-    utterance.rate = 0.9;
-    utterance.volume = 1;
-
-    const voice = getBrowserVoice(selectedLanguage);
-    if (voice) {
-      utterance.voice = voice;
-      utterance.lang = voice.lang;
-    }
-
-    utterance.onend = () => resolve();
-    utterance.onerror = event => {
-      $("videoStatus").textContent =
-        "Speech failed. Check your phone's text-to-speech settings.";
-      resolve();
-    };
-
-    window.speechSynthesis.speak(utterance);
+function blobToDataURL(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error("रिकॉर्डिंग पढ़ी नहीं जा सकी।"));
+    reader.readAsDataURL(blob);
   });
 }
 
-function playBlob(blob) {
-  return new Promise(resolve => {
-    const url = URL.createObjectURL(blob);
-    const audio = new Audio(url);
-    activeAudio = audio;
-    let finished = false;
+function dataURLToBlob(dataURL) {
+  const parts = dataURL.split(",");
+  const mime = parts[0].match(/:(.*?);/)[1];
+  const binary = atob(parts[1]);
+  const bytes = new Uint8Array(binary.length);
 
-    const finish = () => {
-      if (finished) return;
-      finished = true;
-      URL.revokeObjectURL(url);
-      if (activeAudio === audio) activeAudio = null;
-      resolve();
-    };
-
-    audio.onended = finish;
-    audio.onerror = finish;
-    audio.play().catch(finish);
-  });
-}
-
-async function playSceneAudio(index) {
-  const scene = currentScenes[index];
-  if (!scene) return;
-
-  const blob = sceneAudioBlobs[index];
-
-  if (blob) {
-    $("videoStatus").textContent = "🎙️ Playing your recording for this scene.";
-    await playBlob(blob);
-  } else {
-    $("videoStatus").textContent = "🔊 Using your phone's browser speech voice.";
-    await speakBrowser(scene.narration);
-  }
-}
-
-function updateVideoScene() {
-  if (!currentScenes.length) return;
-
-  const scene = currentScenes[currentScene];
-  $("videoTitle").textContent = `Scene ${currentScene + 1}: ${scene.title}`;
-  $("videoText").textContent = scene.onScreen;
-  $("videoNarration").textContent = scene.narration;
-  $("timeline").value = currentScene;
-
-  $("videoStatus").textContent = sceneAudioBlobs[currentScene]
-    ? "🎙️ Your recording is available for this scene."
-    : "🔊 Browser voice will be used for this scene.";
-}
-
-async function playVideo() {
-  if (!currentScenes.length) return;
-
-  if (playing) return;
-  playing = true;
-  $("playBtn").textContent = "⏸ Playing...";
-
-  while (playing && currentScene < currentScenes.length) {
-    updateVideoScene();
-    await playSceneAudio(currentScene);
-
-    if (!playing) break;
-
-    if (currentScene < currentScenes.length - 1) {
-      currentScene++;
-    } else {
-      playing = false;
-      $("playBtn").textContent = "▶ Play";
-      $("videoStatus").textContent = "✅ Lesson narration finished.";
-      break;
-    }
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
   }
 
-  if (currentScene < currentScenes.length) updateVideoScene();
-  if (!playing) $("playBtn").textContent = "▶ Play";
+  return new Blob([bytes], { type: mime });
 }
 
-function pauseVideo() {
-  playing = false;
-  stopAudio();
-  $("playBtn").textContent = "▶ Play";
-  $("videoStatus").textContent = "Paused.";
-}
-
-function makeScenes(topic, language) {
-  const hi = language === "Hindi";
-
-  const titles = hi
-    ? ["परिचय", "मूल अवधारणा", "मुख्य बिंदु", "उदाहरण", "उपयोग", "सारांश", "निष्कर्ष"]
-    : ["Introduction", "Basic Concept", "Main Points", "Example", "Applications", "Summary", "Conclusion"];
-
-  const narrations = hi ? [
-    `नमस्ते विद्यार्थियों। आज हम ${topic} के बारे में सीखेंगे।`,
-    `${topic} को समझने के लिए पहले इसकी मूल अवधारणा को समझना जरूरी है।`,
-    `${topic} के महत्वपूर्ण बिंदुओं को क्रम से समझना चाहिए।`,
-    `अब ${topic} का एक आसान उदाहरण समझते हैं।`,
-    `${topic} का उपयोग कई परिस्थितियों में किया जा सकता है।`,
-    `आज हमने ${topic} की मुख्य अवधारणाओं और उदाहरणों को दोहराया।`,
-    `हमारा पाठ पूरा हुआ। ध्यान से सीखने के लिए धन्यवाद।`
-  ] : [
-    `Hello students. Today we will learn about ${topic}.`,
-    `To understand ${topic}, we first need to understand its basic concept.`,
-    `Let us review the important points about ${topic}.`,
-    `Now let us understand a simple example of ${topic}.`,
-    `${topic} can be useful in different real-life situations.`,
-    `Today we reviewed the main concepts and examples of ${topic}.`,
-    `Our lesson is complete. Thank you for learning with us.`
-  ];
-
-  return titles.map((title, i) => ({
-    title,
-    visual: `${hi ? "विषय" : "Topic"}: ${topic}`,
-    onScreen: hi ? `${topic} — ${title}` : `${topic} — ${title}`,
-    narration: narrations[i]
-  }));
-}
-
-$("photoInput").addEventListener("change", function() {
-  const file = this.files && this.files[0];
+$("photoInput").addEventListener("change", event => {
+  const file = event.target.files[0];
   if (!file) return;
 
-  if (teacherPhotoURL) URL.revokeObjectURL(teacherPhotoURL);
-  teacherPhotoURL = URL.createObjectURL(file);
-  $("photoPreview").src = teacherPhotoURL;
+  if (photoURL) URL.revokeObjectURL(photoURL);
+  photoURL = URL.createObjectURL(file);
+
+  $("photoPreview").src = photoURL;
   $("photoPreview").style.display = "block";
-  $("videoPhoto").src = teacherPhotoURL;
+
+  $("videoPhoto").src = photoURL;
   $("videoPhoto").style.display = "block";
 });
 
-$("voiceInput").addEventListener("change", function() {
-  const file = this.files && this.files[0];
+$("voiceInput").addEventListener("change", event => {
+  const file = event.target.files[0];
   if (!file) return;
 
-  generalVoiceBlob = file;
-  if (generalVoiceURL) URL.revokeObjectURL(generalVoiceURL);
-  generalVoiceURL = URL.createObjectURL(file);
-  $("voicePlayer").src = generalVoiceURL;
-  $("voicePlayer").classList.remove("hidden");
-  $("playGeneralBtn").classList.remove("hidden");
-  $("generalVoiceStatus").textContent = "Voice sample ready. This sample is not automatically cloned.";
+  voiceBlob = file;
+  $("voicePlayer").src = URL.createObjectURL(file);
+  $("voicePlayer").style.display = "block";
+
+  setStatus("voiceStatus", "रिकॉर्डिंग/ऑडियो फ़ाइल चुनी गई है। अब Voice Clone बनाएँ।");
 });
 
-$("recordGeneralBtn").addEventListener("click", async () => {
+$("recordBtn").addEventListener("click", async () => {
   try {
-    recordingStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    generalChunks = [];
-    generalRecorder = new MediaRecorder(recordingStream);
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      throw new Error("आवाज रिकॉर्ड करने के लिए इस वेबसाइट को Chrome में HTTPS पर खोलें।");
+    }
 
-    generalRecorder.ondataavailable = event => {
-      if (event.data.size) generalChunks.push(event.data);
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+
+    mediaRecorder.ondataavailable = event => {
+      if (event.data.size > 0) audioChunks.push(event.data);
     };
 
-    generalRecorder.onstop = () => {
-      generalVoiceBlob = new Blob(generalChunks, { type: "audio/webm" });
-      if (generalVoiceURL) URL.revokeObjectURL(generalVoiceURL);
-      generalVoiceURL = URL.createObjectURL(generalVoiceBlob);
-      $("voicePlayer").src = generalVoiceURL;
-      $("voicePlayer").classList.remove("hidden");
-      $("playGeneralBtn").classList.remove("hidden");
-      $("generalVoiceStatus").textContent = "✅ Your voice recording is ready.";
-      recordingStream?.getTracks().forEach(track => track.stop());
-      recordingStream = null;
+    mediaRecorder.onstop = () => {
+      voiceBlob = new Blob(audioChunks, {
+        type: mediaRecorder.mimeType || "audio/webm"
+      });
+
+      $("voicePlayer").src = URL.createObjectURL(voiceBlob);
+      $("voicePlayer").style.display = "block";
+
+      stream.getTracks().forEach(track => track.stop());
+
+      $("recordBtn").disabled = false;
+      $("stopBtn").disabled = true;
+
+      setStatus(
+        "voiceStatus",
+        "आपकी रिकॉर्डिंग तैयार है। पहले Play करके सुनें, फिर Voice Clone बनाएँ।"
+      );
     };
 
-    generalRecorder.start();
-    $("recordGeneralBtn").classList.add("hidden");
-    $("stopGeneralBtn").classList.remove("hidden");
-    $("generalVoiceStatus").textContent = "🔴 Recording. Speak now.";
+    mediaRecorder.start();
+
+    $("recordBtn").disabled = true;
+    $("stopBtn").disabled = false;
+
+    setStatus("voiceStatus", "रिकॉर्डिंग चल रही है। साफ आवाज़ में बोलें।");
   } catch (error) {
-    $("generalVoiceStatus").textContent = "Microphone permission is required.";
+    setStatus("voiceStatus", "रिकॉर्डिंग शुरू नहीं हुई: " + error.message);
   }
 });
 
-$("stopGeneralBtn").addEventListener("click", () => {
-  if (generalRecorder && generalRecorder.state !== "inactive") generalRecorder.stop();
-  $("recordGeneralBtn").classList.remove("hidden");
-  $("stopGeneralBtn").classList.add("hidden");
+$("stopBtn").addEventListener("click", () => {
+  if (mediaRecorder && mediaRecorder.state !== "inactive") {
+    mediaRecorder.stop();
+  }
 });
 
-$("playGeneralBtn").addEventListener("click", () => {
-  if ($("voicePlayer").src) $("voicePlayer").play();
+$("cloneBtn").addEventListener("click", async () => {
+  const button = $("cloneBtn");
+
+  if (!voiceBlob) {
+    setStatus("voiceStatus", "पहले अपनी आवाज़ रिकॉर्ड करें या ऑडियो फ़ाइल चुनें।");
+    return;
+  }
+
+  if (voiceBlob.size > 8 * 1024 * 1024) {
+    setStatus("voiceStatus", "रिकॉर्डिंग 8 MB से बड़ी है। छोटी रिकॉर्डिंग चुनें।");
+    return;
+  }
+
+  setBusy(button, true, "Voice Clone बनाया जा रहा है...");
+
+  try {
+    const audioBase64 = await blobToDataURL(voiceBlob);
+
+    const response = await fetch("/api/Voice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "clone",
+        audioBase64
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success || !data.voiceId) {
+      throw new Error(data.error || "Voice Clone नहीं बन पाया।");
+    }
+
+    voiceId = data.voiceId;
+    localStorage.setItem("teachgenai_voice_id", voiceId);
+
+    setStatus(
+      "voiceStatus",
+      "✅ Voice Clone तैयार है! अब पाठ बनाएँ और क्लोन आवाज़ में सुनें।"
+    );
+  } catch (error) {
+    setStatus(
+      "voiceStatus",
+      "Voice Clone में समस्या: " + error.message +
+      " अगर API error आए तो Vercel में ELEVENLABS_API_KEY और deployment जाँचें।"
+    );
+  } finally {
+    setBusy(button, false);
+  }
 });
 
 $("generateBtn").addEventListener("click", async () => {
   const topic = $("topicInput").value.trim();
-  selectedLanguage = $("languageInput").value;
+  const language = $("languageInput").value;
+  const button = $("generateBtn");
 
   if (!topic) {
-    alert("Please enter a topic.");
+    setStatus("lessonStatus", "पहले पाठ का विषय लिखें।");
     return;
   }
 
-  stopPlayback();
-  $("generationStatus").classList.remove("hidden");
-  $("generationStatus").textContent = "Preparing lesson...";
+  setBusy(button, true, "पाठ तैयार हो रहा है...");
+  setStatus("lessonStatus", "AI से पाठ माँगा जा रहा है...");
+  $("lessonOutput").textContent = "";
 
-  currentScenes = makeScenes(topic, selectedLanguage);
+  try {
+    const response = await fetch("/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic, language })
+    });
 
-  // Start each new topic with a clean in-memory voice list.
-  // Old database recordings are not automatically deleted.
-  sceneAudioBlobs = [];
-  sceneAudioURLs = [];
+    const data = await response.json();
 
-  $("lessonContent").innerHTML = `
-    <h3>${escapeHTML(topic)}</h3>
-    <p>${selectedLanguage === "Hindi"
-      ? "यह पाठ उदाहरणात्मक narration के साथ तैयार हुआ है।"
-      : "This lesson is ready with sample narration."}</p>
-    <p>Scenes: ${currentScenes.length}</p>
-    <p class="small">Note: this version creates a sample lesson structure; full AI lesson generation requires connecting the lesson API.</p>
-  `;
-
-  $("lessonSection").classList.remove("hidden");
-  $("storyboardSection").classList.add("hidden");
-  $("videoSection").classList.add("hidden");
-  $("generationStatus").textContent = "✅ Lesson prepared.";
-});
-
-$("createVideoBtn").addEventListener("click", async () => {
-  await loadSavedVoices();
-
-  // Saved recordings are indexed by scene number. To avoid using recordings
-  // from an old topic, ask before allowing them to be used.
-  const hasOldVoices = sceneAudioBlobs.some(Boolean);
-
-  if (hasOldVoices) {
-    const useOld = confirm(
-      "Saved recordings exist for these scene numbers. They may belong to an earlier topic. OK = use them; Cancel = clear them for this topic."
-    );
-
-    if (!useOld) {
-      await clearAllSceneVoices();
-      sceneAudioBlobs = [];
-      sceneAudioURLs.forEach(url => url && URL.revokeObjectURL(url));
-      sceneAudioURLs = [];
+    if (!response.ok || !data.lesson) {
+      throw new Error(data.error || "पाठ तैयार नहीं हो पाया।");
     }
+
+    lessonText = data.lesson;
+    $("lessonOutput").textContent = lessonText;
+    $("createScenesBtn").disabled = false;
+
+    setStatus("lessonStatus", "✅ पाठ तैयार है। अब वीडियो सीन बनाएँ।");
+  } catch (error) {
+    setStatus(
+      "lessonStatus",
+      "पाठ बनाने में समस्या: " + error.message +
+      " जाँचें कि /api सही तैनात है और GROQ_API_KEY Vercel में मौजूद है।"
+    );
+  } finally {
+    setBusy(button, false);
   }
-
-  renderStoryboard();
-  $("storyboardSection").classList.remove("hidden");
-  $("videoSection").classList.remove("hidden");
-
-  currentScene = 0;
-  $("timeline").max = currentScenes.length - 1;
-  $("timeline").value = 0;
-
-  updateVideoScene();
-  $("videoSection").scrollIntoView({ behavior: "smooth" });
 });
 
-function renderStoryboard() {
+$("createScenesBtn").addEventListener("click", () => {
+  if (!lessonText) return;
+
+  const paragraphs = lessonText
+    .split(/\n+/)
+    .map(p => p.trim())
+    .filter(Boolean);
+
+  scenes = (paragraphs.length ? paragraphs : [lessonText]).slice(0, 8);
+  currentScene = 0;
+
   $("scenesContainer").innerHTML = "";
 
-  currentScenes.forEach((scene, index) => {
-    const hasVoice = !!sceneAudioBlobs[index];
-    const div = document.createElement("div");
-    div.className = "scene";
+  scenes.forEach((text, index) => {
+    const card = document.createElement("div");
+    card.className = "scene";
 
-    div.innerHTML = `
-      <h3>Scene ${index + 1}: ${escapeHTML(scene.title)}</h3>
-      <p><b>Visual:</b> ${escapeHTML(scene.visual)}</p>
-      <p><b>On-screen:</b> ${escapeHTML(scene.onScreen)}</p>
-      <p><b>Narration:</b> ${escapeHTML(scene.narration)}</p>
-      <div class="sceneVoice">
-        <b>🎙️ Scene voice</b>
-        <div class="sceneStatus" id="sceneStatus${index}">
-          ${hasVoice ? "Saved recording available" : "No scene recording; browser voice will be used"}
-        </div>
-        <button class="primary" id="recordScene${index}">🎙️ Record this scene</button>
-        <button class="danger hidden" id="stopScene${index}">⏹ Stop recording</button>
-        <button class="secondary ${hasVoice ? "" : "hidden"}" id="playScene${index}">▶ Play saved recording</button>
-      </div>
-    `;
+    const title = document.createElement("h3");
+    title.textContent = "Scene " + (index + 1);
 
-    $("scenesContainer").appendChild(div);
+    const paragraph = document.createElement("p");
+    paragraph.textContent = text;
 
-    $(`recordScene${index}`).addEventListener("click", () => startSceneRecording(index));
-    $(`stopScene${index}`).addEventListener("click", stopSceneRecording);
-    $(`playScene${index}`).addEventListener("click", () => {
-      const blob = sceneAudioBlobs[index];
-      if (blob) {
-        stopAudio();
-        playBlob(blob);
-      }
-    });
+    card.append(title, paragraph);
+    $("scenesContainer").appendChild(card);
   });
-}
 
-async function startSceneRecording(index) {
-  try {
-    stopPlayback();
-    recordingStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    sceneChunks = [];
-    recordingSceneIndex = index;
-    sceneRecorder = new MediaRecorder(recordingStream);
+  $("previousBtn").disabled = true;
+  $("nextBtn").disabled = scenes.length <= 1;
+  $("playBtn").disabled = false;
 
-    sceneRecorder.ondataavailable = event => {
-      if (event.data.size) sceneChunks.push(event.data);
-    };
-
-    sceneRecorder.onstop = async () => {
-      const blob = new Blob(sceneChunks, { type: "audio/webm" });
-
-      try {
-        await saveSceneVoice(recordingSceneIndex, blob);
-        sceneAudioBlobs[recordingSceneIndex] = blob;
-        if (sceneAudioURLs[recordingSceneIndex]) {
-          URL.revokeObjectURL(sceneAudioURLs[recordingSceneIndex]);
-        }
-        sceneAudioURLs[recordingSceneIndex] = URL.createObjectURL(blob);
-        $("videoStatus").textContent = "✅ Scene recording saved.";
-      } catch (error) {
-        $("videoStatus").textContent = "Recording could not be saved.";
-      }
-
-      recordingStream?.getTracks().forEach(track => track.stop());
-      recordingStream = null;
-      renderStoryboard();
-      updateVideoScene();
-    };
-
-    sceneRecorder.start();
-    $(`recordScene${index}`).classList.add("hidden");
-    $(`stopScene${index}`).classList.remove("hidden");
-    $(`sceneStatus${index}`).textContent = "🔴 Recording...";
-  } catch (error) {
-    $("videoStatus").textContent = "Microphone permission is required.";
-  }
-}
-
-function stopSceneRecording() {
-  if (sceneRecorder && sceneRecorder.state !== "inactive") {
-    sceneRecorder.stop();
-  }
-}
-
-$("playBtn").addEventListener("click", playVideo);
-$("pauseBtn").addEventListener("click", pauseVideo);
-
-$("nextBtn").addEventListener("click", () => {
-  pauseVideo();
-  if (currentScene < currentScenes.length - 1) currentScene++;
-  updateVideoScene();
+  showScene(0);
+  setStatus(
+    "videoStatus",
+    "सीन तैयार हैं। Play दबाकर क्लोन आवाज़ में सुनें। यह अभी वीडियो प्रीव्यू है, MP4 फ़ाइल नहीं।"
+  );
 });
+
+function showScene(index) {
+  if (!scenes.length) return;
+
+  currentScene = Math.max(0, Math.min(index, scenes.length - 1));
+  $("sceneTitle").textContent = "Scene " + (currentScene + 1);
+  $("sceneText").textContent = scenes[currentScene];
+
+  $("previousBtn").disabled = currentScene === 0;
+  $("nextBtn").disabled = currentScene === scenes.length - 1;
+}
 
 $("previousBtn").addEventListener("click", () => {
-  pauseVideo();
-  if (currentScene > 0) currentScene--;
-  updateVideoScene();
+  stopAudio();
+  showScene(currentScene - 1);
 });
 
-$("restartBtn").addEventListener("click", () => {
-  pauseVideo();
-  currentScene = 0;
-  updateVideoScene();
+$("nextBtn").addEventListener("click", () => {
+  stopAudio();
+  showScene(currentScene + 1);
 });
 
-$("timeline").addEventListener("input", function() {
-  pauseVideo();
-  currentScene = Number(this.value);
-  updateVideoScene();
+$("stopAudioBtn").addEventListener("click", () => {
+  stopAudio();
+  setStatus("videoStatus", "आवाज़ रोक दी गई है।");
 });
 
-$("clearOldRecordingsBtn").addEventListener("click", async () => {
-  const confirmed = confirm(
-    "Delete ALL saved TeachGenAI scene recordings in this browser? This cannot be undone."
-  );
+$("playBtn").addEventListener("click", async () => {
+  if (!scenes.length) {
+    setStatus("videoStatus", "पहले पाठ तैयार करें और वीडियो सीन बनाएँ।");
+    return;
+  }
 
-  if (!confirmed) return;
+  if (!voiceId) {
+    setStatus(
+      "videoStatus",
+      "आपकी क्लोन आवाज़ अभी सेव नहीं है। पहले ऊपर Voice Clone बनाएँ।"
+    );
+    return;
+  }
+
+  stopAudio();
+  const button = $("playBtn");
+  setBusy(button, true, "आवाज़ तैयार हो रही है...");
 
   try {
-    stopPlayback();
-    await clearAllSceneVoices();
-    sceneAudioBlobs = [];
-    sceneAudioURLs.forEach(url => url && URL.revokeObjectURL(url));
-    sceneAudioURLs = [];
+    const response = await fetch("/api/Voice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "speech",
+        voiceId,
+        text: scenes[currentScene]
+      })
+    });
 
-    if (currentScenes.length) {
-      renderStoryboard();
-      updateVideoScene();
+    const data = await response.json();
+
+    if (!response.ok || !data.audioBase64) {
+      throw new Error(data.error || "आवाज़ तैयार नहीं हो पाई।");
     }
 
-    $("videoStatus").textContent = "🗑️ All saved scene recordings deleted.";
+    const audioBlob = dataURLToBlob("data:audio/mpeg;base64," + data.audioBase64);
+    currentAudio = new Audio(URL.createObjectURL(audioBlob));
+
+    currentAudio.onended = () => {
+      currentAudio = null;
+
+      if (currentScene < scenes.length - 1) {
+        showScene(currentScene + 1);
+        setStatus("videoStatus", "अगला सीन तैयार है। Play दबाकर जारी रखें।");
+      } else {
+        setStatus("videoStatus", "✅ सभी सीन सुन लिए गए।");
+      }
+    };
+
+    await currentAudio.play();
+    setStatus("videoStatus", "🔊 आपकी क्लोन आवाज़ में सीन चल रहा है।");
   } catch (error) {
-    $("videoStatus").textContent = "Could not delete saved recordings.";
+    setStatus("videoStatus", "आवाज़ में समस्या: " + error.message);
+  } finally {
+    setBusy(button, false);
   }
 });
-
-openDatabase()
-  .then(() => console.log("TeachGenAI voice database ready."))
-  .catch(error => {
-    console.error(error);
-    $("generationStatus").textContent =
-      "Voice database unavailable. Browser speech may still work.";
-  });
-
-window.addEventListener("beforeunload", () => {
-  stopPlayback();
-  if (recordingStream) recordingStream.getTracks().forEach(track => track.stop());
-});
 </script>
+
 </body>
 </html>
