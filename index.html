@@ -14,7 +14,7 @@ body{
 }
 header{
   background:#173b72;color:white;
-  padding:22px 14px;border-radius:15px;
+  padding:24px 14px;border-radius:15px;
   text-align:center;margin-bottom:18px
 }
 header h1{margin:0 0 8px}
@@ -24,54 +24,52 @@ header p{margin:0}
   border-radius:14px;margin:14px 0;
   box-shadow:0 3px 12px #0000000d
 }
-h2{font-size:20px;margin-top:0}
-label{display:block;font-weight:bold;margin:14px 0 7px}
-input,select,textarea{
-  width:100%;padding:12px;
+h2{font-size:21px;margin-top:0}
+label{
+  display:block;font-weight:bold;
+  margin:14px 0 7px
+}
+input,select{
+  width:100%;padding:13px;
   border:1px solid #cbd5e1;
-  border-radius:8px;font-size:16px;
+  border-radius:9px;font-size:16px;
   background:white
 }
 button{
-  width:100%;padding:13px;margin-top:10px;
+  width:100%;padding:14px;margin-top:10px;
   border:0;border-radius:9px;
   background:#2563eb;color:white;
-  font-size:16px;font-weight:bold;
-  cursor:pointer
+  font-size:16px;font-weight:bold
 }
-button:disabled{opacity:.6}
-button.secondary{background:#475569}
-button.green{background:#16803d}
-button.orange{background:#b45309}
+button:disabled{opacity:.55}
+.green{background:#16803d}
+.gray{background:#64748b}
 .status{
-  padding:12px;background:#eff6ff;
-  border-radius:8px;margin-top:12px;
-  overflow-wrap:anywhere
+  padding:13px;background:#eff6ff;
+  border-radius:9px;margin-top:12px;
+  line-height:1.6;overflow-wrap:anywhere
 }
-.warning{
-  background:#fff7ed;padding:12px;
-  border-radius:8px;font-size:14px;line-height:1.6
+.small{
+  font-size:14px;color:#64748b;line-height:1.7
 }
 #photoPreview{
-  display:none;width:150px;max-height:180px;
-  object-fit:cover;border-radius:12px;
-  margin-top:12px
+  display:none;width:140px;max-height:170px;
+  object-fit:cover;border-radius:12px;margin-top:12px
 }
-.scene{
-  border:1px solid #dbe3ef;
-  padding:14px;border-radius:10px;margin:12px 0
-}
-.scene h3{margin-top:0}
 #videoStage{
   background:#111827;color:white;
-  padding:18px;border-radius:12px;
-  text-align:center;min-height:200px
+  padding:20px;border-radius:12px;
+  text-align:center;min-height:210px
 }
 #videoPhoto{
-  display:none;max-width:140px;max-height:140px;
+  display:none;width:120px;height:120px;
   object-fit:cover;border-radius:50%;margin:8px auto
 }
-.small{font-size:13px;color:#64748b;line-height:1.5}
+.scene{
+  background:#f8fafc;border:1px solid #dbe3ef;
+  padding:14px;border-radius:10px;margin-top:12px;
+  line-height:1.7
+}
 footer{text-align:center;padding:20px;color:#64748b}
 </style>
 </head>
@@ -85,37 +83,37 @@ footer{text-align:center;padding:20px;color:#64748b}
 
 <div class="card">
   <h2>👨‍🏫 Teacher Profile</h2>
-
-  <label>अपनी फोटो अपलोड करें</label>
+  <label>अपनी फोटो चुनें</label>
   <input type="file" id="photoInput" accept="image/*">
-  <img id="photoPreview" alt="Your teacher photo">
+  <img id="photoPreview" alt="Teacher Photo">
 </div>
 
 <div class="card">
   <h2>🎙️ आपकी अपनी आवाज़</h2>
 
   <p class="small">
-    साफ आवाज़ में रिकॉर्डिंग करें। Voice Clone बनाने के लिए
-    आपकी रिकॉर्डिंग ElevenLabs API पर भेजी जाएगी।
+    अपनी साफ आवाज़ की रिकॉर्डिंग चुनें या नई रिकॉर्डिंग करें।
+    Voice Clone बनाने के लिए आपकी रिकॉर्डिंग ElevenLabs को भेजी जाएगी।
   </p>
 
-  <label>आवाज की रिकॉर्डिंग</label>
+  <label>अपनी आवाज़ की फ़ाइल चुनें</label>
   <input type="file" id="voiceInput" accept="audio/*">
 
   <button id="recordBtn" class="green">🔴 अपनी आवाज़ रिकॉर्ड करें</button>
-  <button id="stopBtn" class="secondary" disabled>⏹ रिकॉर्डिंग रोकें</button>
+  <button id="stopBtn" class="gray" disabled>⏹ रिकॉर्डिंग रोकें</button>
 
-  <audio id="voicePlayer" controls style="width:100%;display:none;margin-top:12px"></audio>
+  <audio id="voicePlayer" controls
+    style="display:none;width:100%;margin-top:12px"></audio>
 
   <button id="cloneBtn">🗣️ मेरी आवाज़ का Voice Clone बनाएँ</button>
 
-  <div id="voiceStatus" class="status" role="status" aria-live="polite">
-    अभी अपनी आवाज़ रिकॉर्ड करें या ऑडियो फ़ाइल चुनें।
+  <div id="voiceStatus" class="status">
+    अपनी आवाज़ रिकॉर्ड करें या पहले से मौजूद ऑडियो चुनें।
   </div>
 
   <p class="small">
-    नोट: Voice Clone की सुविधा आपके ElevenLabs अकाउंट और उपलब्ध प्लान पर निर्भर है।
-    API Key वेबसाइट के कोड में नहीं, Vercel में सुरक्षित रहनी चाहिए।
+    आपकी API Key Vercel में सुरक्षित रहनी चाहिए।
+    उसे इस HTML कोड में न डालें।
   </p>
 </div>
 
@@ -131,12 +129,14 @@ footer{text-align:center;padding:20px;color:#64748b}
     <option value="English">English</option>
   </select>
 
-  <button id="generateBtn">✨ पाठ तैयार करें</button>
-  <div id="lessonStatus" class="status" role="status" aria-live="polite">
+  <button id="generateBtn">✨ AI से पाठ तैयार करें</button>
+
+  <div id="lessonStatus" class="status">
     अपना विषय लिखकर पाठ तैयार करें।
   </div>
 
-  <div id="lessonOutput" style="white-space:pre-wrap;line-height:1.7;margin-top:14px"></div>
+  <div id="lessonOutput"
+    style="white-space:pre-wrap;line-height:1.8;margin-top:14px"></div>
 </div>
 
 <div class="card">
@@ -154,13 +154,13 @@ footer{text-align:center;padding:20px;color:#64748b}
 
   <div id="scenesContainer"></div>
 
-  <button id="previousBtn" class="secondary" disabled>⬅ पिछला सीन</button>
+  <button id="previousBtn" class="gray" disabled>⬅ पिछला सीन</button>
   <button id="playBtn" disabled>▶ अपनी क्लोन आवाज़ में सुनें</button>
-  <button id="stopAudioBtn" class="secondary">⏹ आवाज़ बंद करें</button>
-  <button id="nextBtn" class="secondary" disabled>अगला सीन ➡</button>
+  <button id="stopAudioBtn" class="gray">⏹ आवाज़ बंद करें</button>
+  <button id="nextBtn" class="gray" disabled>अगला सीन ➡</button>
 
-  <div id="videoStatus" class="status" role="status" aria-live="polite">
-    पाठ तैयार होने के बाद सीन बनाएँ।
+  <div id="videoStatus" class="status">
+    पाठ तैयार होने के बाद वीडियो सीन बनाएँ।
   </div>
 </div>
 
@@ -168,6 +168,12 @@ footer{text-align:center;padding:20px;color:#64748b}
 
 <script>
 const $ = id => document.getElementById(id);
+
+/*
+  आपकी वेबसाइट का Vercel API पता।
+  API Key यहाँ नहीं रखनी है।
+*/
+const API_BASE = "https://teachgenai-oych.vercel.app";
 
 let voiceBlob = null;
 let mediaRecorder = null;
@@ -179,14 +185,42 @@ let currentScene = 0;
 let currentAudio = null;
 let voiceId = localStorage.getItem("teachgenai_voice_id") || "";
 
-function setStatus(id, message) {
-  $(id).textContent = message;
+function status(id, text) {
+  $(id).textContent = text;
 }
 
-function setBusy(button, busy, busyText) {
+async function apiRequest(path, body) {
+  const response = await fetch(API_BASE + path, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body)
+  });
+
+  const raw = await response.text();
+  let data;
+
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    if (raw.trimStart().startsWith("<")) {
+      throw new Error(
+        "Vercel ने HTML पेज लौटाया है। API deployment और api फ़ाइल का रास्ता जाँचें।"
+      );
+    }
+    throw new Error("API का जवाब JSON नहीं है: " + raw.slice(0,180));
+  }
+
+  if (!response.ok) {
+    throw new Error(data.error || "API अनुरोध असफल हुआ: " + response.status);
+  }
+
+  return data;
+}
+
+function setBusy(button, busy, message) {
   if (busy) {
     button.dataset.oldText = button.textContent;
-    button.textContent = busyText;
+    button.textContent = message;
     button.disabled = true;
   } else {
     button.textContent = button.dataset.oldText || button.textContent;
@@ -200,33 +234,29 @@ function stopAudio() {
     currentAudio.src = "";
     currentAudio = null;
   }
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
 }
 
 function blobToDataURL(blob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(new Error("रिकॉर्डिंग पढ़ी नहीं जा सकी।"));
+    reader.onerror = () => reject(new Error("ऑडियो फ़ाइल पढ़ी नहीं जा सकी।"));
     reader.readAsDataURL(blob);
   });
 }
 
-function dataURLToBlob(dataURL) {
-  const parts = dataURL.split(",");
-  const mime = parts[0].match(/:(.*?);/)[1];
-  const binary = atob(parts[1]);
+function base64ToAudio(base64) {
+  const binary = atob(base64);
   const bytes = new Uint8Array(binary.length);
 
   for (let i = 0; i < binary.length; i++) {
     bytes[i] = binary.charCodeAt(i);
   }
 
-  return new Blob([bytes], { type: mime });
+  return new Blob([bytes], {type:"audio/mpeg"});
 }
 
+/* PHOTO */
 $("photoInput").addEventListener("change", event => {
   const file = event.target.files[0];
   if (!file) return;
@@ -241,24 +271,31 @@ $("photoInput").addEventListener("change", event => {
   $("videoPhoto").style.display = "block";
 });
 
+/* AUDIO FILE */
 $("voiceInput").addEventListener("change", event => {
   const file = event.target.files[0];
   if (!file) return;
+
+  if (!file.type.startsWith("audio/")) {
+    status("voiceStatus", "कृपया ऑडियो फ़ाइल चुनें।");
+    return;
+  }
 
   voiceBlob = file;
   $("voicePlayer").src = URL.createObjectURL(file);
   $("voicePlayer").style.display = "block";
 
-  setStatus("voiceStatus", "रिकॉर्डिंग/ऑडियो फ़ाइल चुनी गई है। अब Voice Clone बनाएँ।");
+  status("voiceStatus", "ऑडियो चुना गया है। पहले सुनें, फिर Voice Clone बनाएँ।");
 });
 
+/* RECORD VOICE */
 $("recordBtn").addEventListener("click", async () => {
   try {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      throw new Error("आवाज रिकॉर्ड करने के लिए इस वेबसाइट को Chrome में HTTPS पर खोलें।");
+    if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+      throw new Error("Chrome में HTTPS वेबसाइट खोलकर माइक्रोफ़ोन की अनुमति दें।");
     }
 
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
 
     audioChunks = [];
     mediaRecorder = new MediaRecorder(stream);
@@ -280,10 +317,7 @@ $("recordBtn").addEventListener("click", async () => {
       $("recordBtn").disabled = false;
       $("stopBtn").disabled = true;
 
-      setStatus(
-        "voiceStatus",
-        "आपकी रिकॉर्डिंग तैयार है। पहले Play करके सुनें, फिर Voice Clone बनाएँ।"
-      );
+      status("voiceStatus", "✅ रिकॉर्डिंग तैयार है। Play करके सुनें।");
     };
 
     mediaRecorder.start();
@@ -291,9 +325,9 @@ $("recordBtn").addEventListener("click", async () => {
     $("recordBtn").disabled = true;
     $("stopBtn").disabled = false;
 
-    setStatus("voiceStatus", "रिकॉर्डिंग चल रही है। साफ आवाज़ में बोलें।");
+    status("voiceStatus", "🔴 रिकॉर्डिंग चल रही है। साफ आवाज़ में बोलें।");
   } catch (error) {
-    setStatus("voiceStatus", "रिकॉर्डिंग शुरू नहीं हुई: " + error.message);
+    status("voiceStatus", "रिकॉर्डिंग समस्या: " + error.message);
   }
 });
 
@@ -303,100 +337,89 @@ $("stopBtn").addEventListener("click", () => {
   }
 });
 
+/* CREATE VOICE CLONE */
 $("cloneBtn").addEventListener("click", async () => {
   const button = $("cloneBtn");
 
   if (!voiceBlob) {
-    setStatus("voiceStatus", "पहले अपनी आवाज़ रिकॉर्ड करें या ऑडियो फ़ाइल चुनें।");
+    status("voiceStatus", "पहले अपनी आवाज़ रिकॉर्ड करें या ऑडियो फ़ाइल चुनें।");
     return;
   }
 
   if (voiceBlob.size > 8 * 1024 * 1024) {
-    setStatus("voiceStatus", "रिकॉर्डिंग 8 MB से बड़ी है। छोटी रिकॉर्डिंग चुनें।");
+    status("voiceStatus", "फ़ाइल 8 MB से बड़ी है। छोटी रिकॉर्डिंग चुनें।");
     return;
   }
 
   setBusy(button, true, "Voice Clone बनाया जा रहा है...");
+  status("voiceStatus", "रिकॉर्डिंग सुरक्षित तरीके से API पर भेजी जा रही है...");
 
   try {
     const audioBase64 = await blobToDataURL(voiceBlob);
 
-    const response = await fetch("/api/Voice", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "clone",
-        audioBase64
-      })
+    const data = await apiRequest("/api/Voice", {
+      action:"clone",
+      audioBase64
     });
 
-    const data = await response.json();
-
-    if (!response.ok || !data.success || !data.voiceId) {
-      throw new Error(data.error || "Voice Clone नहीं बन पाया।");
+    if (!data.success || !data.voiceId) {
+      throw new Error(data.error || "Voice ID नहीं मिला।");
     }
 
     voiceId = data.voiceId;
     localStorage.setItem("teachgenai_voice_id", voiceId);
 
-    setStatus(
+    status(
       "voiceStatus",
-      "✅ Voice Clone तैयार है! अब पाठ बनाएँ और क्लोन आवाज़ में सुनें।"
+      "✅ Voice Clone बन गया! अब पाठ तैयार करें और क्लोन आवाज़ में सुनें।"
     );
   } catch (error) {
-    setStatus(
+    status(
       "voiceStatus",
       "Voice Clone में समस्या: " + error.message +
-      " अगर API error आए तो Vercel में ELEVENLABS_API_KEY और deployment जाँचें।"
+      " Vercel में ELEVENLABS_API_KEY और api/Voice.js deployment जाँचें।"
     );
   } finally {
     setBusy(button, false);
   }
 });
 
+/* GENERATE LESSON */
 $("generateBtn").addEventListener("click", async () => {
   const topic = $("topicInput").value.trim();
   const language = $("languageInput").value;
   const button = $("generateBtn");
 
   if (!topic) {
-    setStatus("lessonStatus", "पहले पाठ का विषय लिखें।");
+    status("lessonStatus", "पहले पाठ का विषय लिखें।");
     return;
   }
 
-  setBusy(button, true, "पाठ तैयार हो रहा है...");
-  setStatus("lessonStatus", "AI से पाठ माँगा जा रहा है...");
+  setBusy(button, true, "AI पाठ तैयार हो रहा है...");
+  status("lessonStatus", "AI से पाठ माँगा जा रहा है...");
   $("lessonOutput").textContent = "";
+  $("createScenesBtn").disabled = true;
 
   try {
-    const response = await fetch("/api", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic, language })
-    });
+    const data = await apiRequest("/api", {topic, language});
 
-    const data = await response.json();
-
-    if (!response.ok || !data.lesson) {
-      throw new Error(data.error || "पाठ तैयार नहीं हो पाया।");
+    if (!data.lesson) {
+      throw new Error("AI ने पाठ नहीं लौटाया।");
     }
 
     lessonText = data.lesson;
     $("lessonOutput").textContent = lessonText;
     $("createScenesBtn").disabled = false;
 
-    setStatus("lessonStatus", "✅ पाठ तैयार है। अब वीडियो सीन बनाएँ।");
+    status("lessonStatus", "✅ पाठ तैयार है। अब वीडियो सीन बनाएँ।");
   } catch (error) {
-    setStatus(
-      "lessonStatus",
-      "पाठ बनाने में समस्या: " + error.message +
-      " जाँचें कि /api सही तैनात है और GROQ_API_KEY Vercel में मौजूद है।"
-    );
+    status("lessonStatus", "पाठ बनाने में समस्या: " + error.message);
   } finally {
     setBusy(button, false);
   }
 });
 
+/* CREATE SCENES */
 $("createScenesBtn").addEventListener("click", () => {
   if (!lessonText) return;
 
@@ -405,7 +428,7 @@ $("createScenesBtn").addEventListener("click", () => {
     .map(p => p.trim())
     .filter(Boolean);
 
-  scenes = (paragraphs.length ? paragraphs : [lessonText]).slice(0, 8);
+  scenes = (paragraphs.length ? paragraphs : [lessonText]).slice(0,8);
   currentScene = 0;
 
   $("scenesContainer").innerHTML = "";
@@ -414,24 +437,22 @@ $("createScenesBtn").addEventListener("click", () => {
     const card = document.createElement("div");
     card.className = "scene";
 
-    const title = document.createElement("h3");
-    title.textContent = "Scene " + (index + 1);
+    const heading = document.createElement("h3");
+    heading.textContent = "🎬 Scene " + (index + 1);
 
     const paragraph = document.createElement("p");
     paragraph.textContent = text;
 
-    card.append(title, paragraph);
+    card.append(heading, paragraph);
     $("scenesContainer").appendChild(card);
   });
 
-  $("previousBtn").disabled = true;
-  $("nextBtn").disabled = scenes.length <= 1;
   $("playBtn").disabled = false;
-
   showScene(0);
-  setStatus(
+
+  status(
     "videoStatus",
-    "सीन तैयार हैं। Play दबाकर क्लोन आवाज़ में सुनें। यह अभी वीडियो प्रीव्यू है, MP4 फ़ाइल नहीं।"
+    "सीन तैयार हैं। Play दबाकर आवाज़ सुनें। यह अभी वीडियो प्रीव्यू है, MP4 फ़ाइल नहीं।"
   );
 });
 
@@ -439,6 +460,7 @@ function showScene(index) {
   if (!scenes.length) return;
 
   currentScene = Math.max(0, Math.min(index, scenes.length - 1));
+
   $("sceneTitle").textContent = "Scene " + (currentScene + 1);
   $("sceneText").textContent = scenes[currentScene];
 
@@ -458,62 +480,58 @@ $("nextBtn").addEventListener("click", () => {
 
 $("stopAudioBtn").addEventListener("click", () => {
   stopAudio();
-  setStatus("videoStatus", "आवाज़ रोक दी गई है।");
+  status("videoStatus", "आवाज़ रोक दी गई है।");
 });
 
+/* PLAY CLONED VOICE */
 $("playBtn").addEventListener("click", async () => {
   if (!scenes.length) {
-    setStatus("videoStatus", "पहले पाठ तैयार करें और वीडियो सीन बनाएँ।");
+    status("videoStatus", "पहले पाठ तैयार करें और वीडियो सीन बनाएँ।");
     return;
   }
 
   if (!voiceId) {
-    setStatus(
-      "videoStatus",
-      "आपकी क्लोन आवाज़ अभी सेव नहीं है। पहले ऊपर Voice Clone बनाएँ।"
-    );
+    status("videoStatus", "पहले ऊपर अपनी आवाज़ का Voice Clone बनाएँ।");
     return;
   }
 
   stopAudio();
+
   const button = $("playBtn");
   setBusy(button, true, "आवाज़ तैयार हो रही है...");
 
   try {
-    const response = await fetch("/api/Voice", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "speech",
-        voiceId,
-        text: scenes[currentScene]
-      })
+    const data = await apiRequest("/api/Voice", {
+      action:"speech",
+      voiceId,
+      text:scenes[currentScene]
     });
 
-    const data = await response.json();
-
-    if (!response.ok || !data.audioBase64) {
-      throw new Error(data.error || "आवाज़ तैयार नहीं हो पाई।");
+    if (!data.audioBase64) {
+      throw new Error("ऑडियो नहीं मिला।");
     }
 
-    const audioBlob = dataURLToBlob("data:audio/mpeg;base64," + data.audioBase64);
-    currentAudio = new Audio(URL.createObjectURL(audioBlob));
+    const audioBlob = base64ToAudio(data.audioBase64);
+    const audioURL = URL.createObjectURL(audioBlob);
+
+    currentAudio = new Audio(audioURL);
 
     currentAudio.onended = () => {
+      URL.revokeObjectURL(audioURL);
       currentAudio = null;
 
       if (currentScene < scenes.length - 1) {
         showScene(currentScene + 1);
-        setStatus("videoStatus", "अगला सीन तैयार है। Play दबाकर जारी रखें।");
+        status("videoStatus", "अगला सीन तैयार है। Play दबाकर सुनें।");
       } else {
-        setStatus("videoStatus", "✅ सभी सीन सुन लिए गए।");
+        status("videoStatus", "✅ सभी सीन सुन लिए गए।");
       }
     };
 
     await currentAudio.play();
-    setStatus("videoStatus", "🔊 आपकी क्लोन आवाज़ में सीन चल रहा है।");
+    status("videoStatus", "🔊 आपकी क्लोन आवाज़ चल रही है।");
   } catch (error) {
-    setStatus("videoStatus", "आवाज़ में समस्या: " + error.message);
+    status("videoStatus", "आवाज़ की समस्या: " + error.message);
   } finally {
     setBusy(button, false);
   }
